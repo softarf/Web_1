@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # здесь мы подключаем наши приложения
+    'firstapp'
 ]
 
 MIDDLEWARE = [
@@ -77,6 +80,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        # Настройки для PostgreSQL
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'db_name',
+        # 'USER': 'postgres',
+        # 'PASSWORD': 'pass',
+        # 'HOST': 'localhost',
+        # 'PORT': 5432,
     }
 }
 
