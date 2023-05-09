@@ -28,4 +28,5 @@ urlpatterns = [
     path('products/', views.products, name='products'),
     path('users/<int:user_id>/<name>/', views.users, name='users'),
     path('users/', views.users, name='users'),
+    path('details/', views.details, name='details'),
 ]
