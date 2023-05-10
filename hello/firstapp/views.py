@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanen
 # Create your views here.
 
 def index(request):
-    return HttpResponse("<h2>Главная</h2>")
+    return render(request, "index.html")
 
 def about(request):
     return HttpResponse("<h2>О сайте</h2>")
