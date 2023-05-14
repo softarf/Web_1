@@ -6,7 +6,11 @@ from django.template.response import TemplateResponse
 # Create your views here.
 
 def index(request):
-    return TemplateResponse(request, "firstapp/home.html")
+    data = {
+        "header": "Передача параметров в шаблон Django.",
+        "message": "Загружен шаблон 'templates/firstapp/index_app1.html'."
+    }
+    return render(request, "firstapp/index_app1.html", context=data)
 
 
 def about(request):
@@ -41,4 +45,5 @@ def details(request):
 def index_1(request):
     # return HttpResponse("<h2>Главная</h2>")
     # return render(request, "index.html")
-    return render(request, "firstapp/home.html")
+    # return render(request, "firstapp/home.html")
+    return TemplateResponse(request, "firstapp/home.html")
