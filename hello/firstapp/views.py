@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.template.response import TemplateResponse
 
 
 # Create your views here.
 
 def index(request):
-    return render(request, "firstapp/home.html")
+    return TemplateResponse(request, "firstapp/home.html")
 
 
 def about(request):
@@ -39,4 +40,5 @@ def details(request):
 
 def index_1(request):
     # return HttpResponse("<h2>Главная</h2>")
-    return render(request, "index.html")
+    # return render(request, "index.html")
+    return render(request, "firstapp/home.html")
