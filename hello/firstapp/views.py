@@ -6,12 +6,7 @@ from django.template.response import TemplateResponse
 # Create your views here.
 
 def index(request):
-    header = "Персональные данные"                     # обычная переменная
-    langs = ["Английский", "Немецкий", "Испанский"]    # список
-    user = {"name": "Максим", "age": 30}               # словарь
-    addr = ("Виноградная", 23, 45)                     # кортеж
-    data = {"header": header, "langs": langs, "user": user, "address": addr}
-    return TemplateResponse(request, "index.html", context=data)
+    return render(request, "firstapp/home.html")
 
 
 def about(request):
@@ -58,4 +53,5 @@ def index_old(request):
     user = {"name": "Максим", "age": 30}               # словарь
     addr = ("Виноградная", 23, 45)                     # кортеж
     data = {"header": header, "langs": langs, "user": user, "address": addr}
-    return render(request, "index.html", context=data)
+    # return render(request, "index.html", context=data)
+    return TemplateResponse(request, "index.html", context=data)
