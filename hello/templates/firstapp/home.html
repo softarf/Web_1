@@ -1,11 +1,16 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta content="text/html; charset=utf-8">
   <title>Привет Django!</title>
 
   <!-- Это внутренний стиль -->
-  <style> h1 {color: green;} </style>
+  <!-- <style> h1 {color: yellow;} </style> -->
+
+  <!-- Это внешний стиль -->
+  <!-- <link rel="stylesheet" href="css/styles.css" > -->  <!-- !!! Так не работало !!! -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" >  <!-- Так сработало -->
 </head>
 <body>
   <!-- Это встроенный стиль -->
@@ -13,6 +18,6 @@
   <!-- <h1 style="color: red">Домашняя страница Django!</h1> -->
   <!-- <h2 style="color: blue; font-size: 12px">templates/firstapp/home.html</h2> -->
   <h1>Домашняя страница Django!</h1>
-  <h2 style="color: blue; font-size: 12px">templates/firstapp/home.html</h2>
+  <h2>templates/firstapp/home.html</h2>
 </body>
 </html>
