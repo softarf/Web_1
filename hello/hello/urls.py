@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView
 
 from firstapp import views
 
@@ -22,8 +23,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', views.index, name='home'),
-    path('about/', views.about, name='about'),
-    path('contact/', views.contact, name='contact'),
+    # path('about/', views.about, name='about'),
+    path('about/', TemplateView.as_view(template_name='firstapp/about.html')),
+    # path('contact/', views.contact, name='contact'),
+    path('contact/', TemplateView.as_view(
+            template_name='firstapp/contact.html',
+            extra_context={"work": "Разработка программных продуктов."})
+    ),
     path('products/<int:product_id>/', views.products, name='products'),
     path('products/', views.products, name='products'),
     path('users/<int:user_id>/<name>/', views.users, name='users'),
