@@ -1,13 +1,17 @@
 /* static/css/styles.css */
-
-body h1 {
-    color: yellow;
+                     /* НЕ применяется */
+h1 {
+    color: blue;
 }
-
-body h2 {
-    color: green;
+                     /* НЕ применяется */
+h2 {
+    color: orange;
 }
-
+                     /* Применяется */
+h3 {
+    color: red;
+}
+                     /* Применяется */
 img {
-    width: 300px;
+    width: 600px;
 }

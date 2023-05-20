@@ -48,13 +48,29 @@ urlpatterns = [
     #                                         4.7.1. Переадресация. Стр 124 - 125.
     path('redirect/contact/', views.contact_redirect),
     path('redirect/details/', views.details_redirect),
-
-    # path('', views.index_wth_base),
-    path('about/', TemplateView.as_view(template_name='firstapp/about.html')),
-    path('contact/', TemplateView.as_view(
-            template_name='firstapp/contact.html',
+    #                                         5.1. Создание и использование шаблонов.
+    path('simple/', views.index_simple),             # "Общий шаблон". Стр 128 - 134.
+    path('home_simple/', views.home_simple),         # "Шаблон приложения". Стр 135 - 137.
+    #                                         5.2. Класс TemplateResponse. Стр. 137 - 138.
+    path('home_simple_class/', views.home_simple),         # "Шаблон приложения". Стр 135 - 137.
+    #                                         5.3. Передача данных в шаблоны. Стр 138 - 140.
+    path('index_data/', views.index_data),
+    #                                         5.4. Передача в шаблон сложных данных. Стр 141 - 143.
+    path('complex_data/', views.index_complex_data),
+    #                                         5.5.1. Основы каскадных таблиц стилей. Стр 143 - 145.
+    #                                         5.5.2. Использование статичных файлов... Стр 148 - 152.
+    path('home_styles/', views.home_styles),
+    #                                       5.5.3. Использование класса TemplateView для вызова шаблонов. Стр 154 - 158.
+    path('', views.index),
+    path('about_class_as_view/', TemplateView.as_view(template_name='firstapp/about_not_base.html')),
+    path('contact_class_as_view/', TemplateView.as_view(template_name='firstapp/contact_not_base.html')),
+    path('contact_class_with_data/', TemplateView.as_view(
+            template_name='firstapp/contact_not_base.html',
             extra_context={"work": "Разработка программных продуктов."})
     ),
-    path('index_old/', views.index_old),
+
+
+    path('about_class_templ/', TemplateView.as_view(template_name='firstapp/about_not_base.html')),
+    # path('index_old/', views.index_old),
     # path('with_base/', views.index_wth_base),
 ]

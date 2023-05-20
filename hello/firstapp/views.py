@@ -5,11 +5,11 @@ from django.template.response import TemplateResponse
 
 # Create your views here.
 
-def index_hello(request):                        # 3.4 Первое приложение на Django. Стр 102.
+def index_hello(request):                   # 3.4 Первое приложение на Django. Стр 102.
     return HttpResponse("Hello world! Это мой первый проект на Django!")
 
 
-def index_request(request):                      # 4.1 Обработка запросов пользователей. Стр 106.
+def index_request(request):                 # 4.1 Обработка запросов пользователей. Стр 106.
     return HttpResponse("<h2>Главная</h2>")
 
 
@@ -55,27 +55,51 @@ def details_redirect(request):
     return HttpResponsePermanentRedirect('/first_request')  # Постоянная переадресация на страницу "Главная".
 
 
-def index(request):
-    # return render(request, "firstapp/home.html")
-    return render(request, "firstapp/index.html")
+def index_simple(request):                  # 5.1. Создание и использование шаблонов.
+    return render(request, "index_simple.html")       # "Общий шаблон". Стр 128 - 134.
 
 
-def index_old(request):
-    # return render(request, "index.html")
-    # return render(request, "firstapp/home.html")
-    # return TemplateResponse(request, "firstapp/home.html")
-    # data = {
-    #     "header": "Передача параметров в шаблон Django.",
-    #     "message": "Загружен шаблон 'templates/firstapp/index_app1.html'."
-    # }
-    # return render(request, "firstapp/index_app1.html", context=data)
-    header = "Персональные данные"                     # обычная переменная
+def home_simple(request):                            # "Шаблон приложения". Стр 135 - 137.
+    return render(request, "firstapp/home_simple.html")
+
+
+#                                             5.2. Класс TemplateResponse. Стр. 137 - 138.
+def home_simple_class_template(request):    # Отображение шаблона классом 'TemplateResponse'.
+    return TemplateResponse(request, "firstapp/home_simple.html")
+
+
+def index_data(request):                    # 5.3. Передача данных в шаблоны. Стр 138 - 140.
+    data = {
+        "header": "Передача параметров в шаблон Django.",
+        "message": "Загружен шаблон 'templates/firstapp/index_data.html'."
+    }
+    return render(request, "firstapp/index_data.html", context=data)
+
+
+def index_complex_data(request):            # 5.4. Передача в шаблон сложных данных. Стр 141 - 143.
+    header = "Персональные данные (через класс)"                     # обычная переменная
     langs = ["Английский", "Немецкий", "Испанский"]    # список
     user = {"name": "Максим", "age": 30}               # словарь
     addr = ("Виноградная", 23, 45)                     # кортеж
     data = {"header": header, "langs": langs, "user": user, "address": addr}
-    # return render(request, "index.html", context=data)
-    return TemplateResponse(request, "index.html", context=data)
+    # return render(request, "index_complex_data.html", context=data)            # Через функцию 'render()'.
+    return TemplateResponse(request, "index_complex_data.html", context=data)    # Через класс 'TemplateResponse'.
+
+
+#                                             5.5.1. Основы каскадных таблиц стилей. Стр 143 - 145.
+#                                             5.5.2. Использование статичных файлов... Стр 148 - 152.
+def home_styles(request):    # Отображение шаблона классом 'TemplateResponse'.
+    return TemplateResponse(request, "firstapp/home_styles.html")
+
+
+#                                           5.5.3. Использование класса TemplateView для вызова шаблонов. Стр 154 - 158.
+#   view-функция не требуется. Ответ формируется прямо в диспетчере URL-адресов.
+def index(request):
+    # return render(request, "firstapp/home.html")
+    return render(request, "firstapp/home_styles.html")
+
+# def home_simple_class_template(request):    # Отображение шаблона классом 'TemplateResponse'.
+#     return TemplateResponse(request, "firstapp/home_simple.html")
 
 
 def index_wth_base(request):

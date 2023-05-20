@@ -1,14 +1,11 @@
+                               <!-- 5.4. Передача в шаблон сложных данных. Стр 141 - 143. -->
 <!DOCTYPE html>
 <html lang="ru">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<!-- charset=windows-1251 - В браузере отображается некорректно. -->
-    <!-- <title>Привет Django!</title>-->
+    <meta content="text/html; charset=utf-8">
     <title>Передача сложных данных</title>
   </head>
   <body>
-    <!-- <h1>Вы на главной странице Django!</h1>-->
-    <!-- <h2>templates/index.html</h2>-->
     <h1>{{ header }}</h1>
     <p>Имя: {{ user.name }} Age: {{ user.age }}</p>
     <p>Адрес: ул. {{ address.0 }}, д. {{ address.1 }}, кв. {{ address.2 }}</p>

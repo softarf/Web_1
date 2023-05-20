@@ -1,24 +1,31 @@
+                               <!-- 5.5.1. Основы каскадных таблиц стилей. Стр 143 - 145. -->
+                               <!-- 5.5.2. Использование статичных файлов... Стр 148 - 152. -->
 <!DOCTYPE html>
 {% load static %}
 <html lang="ru">
-<head>
-  <meta content="text/html; charset=utf-8">
-  <title>Привет Django!</title>
+  <head>
+    <meta content="text/html; charset=utf-8">
+    <title>Привет Django!</title>
 
-  <!-- Это внутренний стиль -->
-  <!-- <style> h1 {color: yellow;} </style> -->
-
-  <!-- Это внешний стиль -->
-  <!-- <link rel="stylesheet" href="css/styles.css" > -->  <!-- !!! Так не работало !!! -->
-  <link rel="stylesheet" href="{% static 'css/styles.css' %}" >  <!-- Так сработало -->
-</head>
-<body>
-  <!-- Это встроенный стиль -->
-  <!--  <font style="color: red">--> <!-- !!! Тег 'font' устаревший и не может быть применён !!! -->
-  <!-- <h1 style="color: red">Домашняя страница Django!</h1> -->
-  <!-- <h2 style="color: blue; font-size: 12px">templates/firstapp/home.html</h2> -->
-  <h1>Домашняя страница Django!</h1>
-  <h2>templates/firstapp/home.html</h2>
-  <img src="{% static 'images/image1.jpg' %}" alt="Ушастый ёжик"> <!-- width="300" -->
-</body>
+                    <!-- Это внутренний стиль -->
+    <style>
+      h1 {color: red;}
+      h2 {color: yellow;}
+    </style>
+                    <!-- Это внешний стиль -->
+    <!-- <link rel="stylesheet" href="css/styles.css" > -->  <!-- !!! Так не работало !!! -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" >  <!-- Так сработало -->
+  </head>
+  <body>
+                    <!-- Это встроенный стиль -->
+    <!--  <font style="color: red">--> <!-- !!! Тег 'font' устаревший и не может быть применён !!! -->
+                    <!-- Применён встроенный стиль -->
+    <h1 style="color: green">Добро пожаловать!</h1>
+                    <!-- Внутренний стиль НЕ применён -->
+    <h2>Домашняя страница Django.</h2>    <!-- ?!? Почему-то, внешний ПРЕОБЛАДАЕТ ?!? -->
+                    <!-- Применён внешний стиль -->
+    <img src="{% static 'images/image1.jpg' %}" alt="Ушастый ёжик"> <!-- width="1200" -->
+                    <!-- Применён внешний стиль -->
+    <h3>templates/firstapp/home_styles.html</h3>
+  </body>
 </html>
