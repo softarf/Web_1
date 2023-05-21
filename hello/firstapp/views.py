@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.template.response import TemplateResponse
 
+from firstapp.forms import UserForm
+
 
 # Create your views here.
 
@@ -118,3 +120,16 @@ def special_tags(request):
         "cats": ["Ноутбуки", "Принтеры", "Сканеры", "Диски", "Шнуры"],
     }
     return render(request, "firstapp/special_tags.html", context=data)
+
+
+#                                             6.1. Определение форм. Стр. 172 - 177.
+#                                             6.2. Использование в формах POST-запросов. Стр. 177 - 179.
+def index_form(request):
+    if request.method == "POST":
+        name = request.POST.get("name")       # получить значение поля Имя.
+        age = request.POST.get("age")         # получить значение поля Возраст.
+        output = f"<h2>Пользователь</h2><h3>Имя - {name}, Возраст - {age}</h3>"
+        return HttpResponse(output)
+    else:
+        userform = UserForm()
+    return render(request, "firstapp/index_form.html", context={"form": userform})

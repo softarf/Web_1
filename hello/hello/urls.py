@@ -73,4 +73,7 @@ urlpatterns = [
     path('with_base/contact/', views.contact_with_base),
     #                                      5.6. Использование специальных тегов в шаблонах HTML-страниц. Стр. 164 - 171.
     path('special_tags/', views.special_tags),
+    #                                         6.1. Определение форм. Стр. 172 - 177.
+    #                                         6.2. Использование в формах POST-запросов. Стр. 177 - 179.
+    path('index_out', views.index_form),
 ]
