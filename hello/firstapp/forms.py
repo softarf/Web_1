@@ -2,6 +2,8 @@
 from django import forms
 
 
+#                                             6.1. Определение форм. Стр. 172 - 177.
+#                                             6.2. Использование в формах POST-запросов. Стр. 177 - 179.
 class UserForm(forms.Form):
     name = forms.CharField(label="Имя клиента", max_length=15, help_text="ФИО не более 15 символов")
     # HTML: <input type="text">
@@ -9,6 +11,7 @@ class UserForm(forms.Form):
     # HTML: <input type="number">
 
 
+#                                             6.3. Использование полей в формах Django. Стр. 179 - 212.
 class FormsList(forms.Form):
     basket = forms.BooleanField(label="Положить товар в корзину", required=False)
     # HTML: <input type="text">
@@ -142,3 +145,43 @@ class FormsList(forms.Form):
     #       <option value="2">Data 2</option>
     #       <option value="3">Data 3</option>
     #     </select>
+
+
+#                                             6.4. Настройка формы и её полей. Стр. 212 - 232.
+#                                         6.4.1. Изменение внешнего вида поля с помощью параметра wiget. Стр. 212 - 213.
+class WigetFieldForm(forms.Form):
+    name = forms.CharField(label="Имя")
+    # HTML: <input type="text">
+    age = forms.IntegerField(label="Возраст", required=False)
+    # HTML: <input type="number">
+    comment1 = forms.CharField(label="Коментарий1", required=False)
+    # HTML: <input type="text">
+    comment2 = forms.CharField(label="Коментарий2", required=False,
+                               widget=forms.Textarea)
+
+
+#                                         6.4.2. Задание начальных значений полей с помощью свойства initial. Стр. 214.
+class InitialFieldForm(forms.Form):
+    name = forms.CharField(label="Имя", initial="Введите ФИО")
+    age = forms.IntegerField(label="Возраст", initial=18, required=False)
+    comment = forms.CharField(label="Коментарий", widget=forms.Textarea, required=False)
+
+
+# 1)                                      6.4.3. Задание порядка следования полей на форме. Стр. 214 - 216.
+class OrderFieldForm(forms.Form):
+    name = forms.CharField(label="Имя", initial="Введите ФИО")
+    age = forms.IntegerField(label="Возраст", initial=18, required=False)
+    field_order = ["age", "name"]
+# 2) Использую класс InitialFieldForm.
+
+
+#                                         6.4.4. Задание подсказок к полям формы. Стр. 216 - 217.
+class HelpFieldForm(forms.Form):
+    name = forms.CharField(label="Имя", help_text="Введите ФИО")
+    age = forms.IntegerField(label="Возраст", help_text="Введите возраст", required=False)
+
+
+#                                         6.4.5. Настройки вида формы. Стр. 217 - 218.
+class ViewForm(forms.Form):
+    name = forms.CharField(label="Имя")
+    age = forms.IntegerField(label="Возраст", required=False)

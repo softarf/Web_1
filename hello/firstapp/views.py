@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.template.response import TemplateResponse
 
-from firstapp.forms import UserForm, FormsList
+from firstapp.forms import UserForm, FormsList, WigetFieldForm, InitialFieldForm, OrderFieldForm
+from firstapp.forms import HelpFieldForm, ViewForm
 
 
 # Create your views here.
@@ -140,7 +141,43 @@ def index_out(request):
     return render(request, "firstapp/index_out.html", context={"form": userform})
 
 
-#                                             6.3. Использование полей в формах Django. Стр. 179 - 212.
+#                                             6.3. Использование полей в формах Django. Стр. 179 - 212. 232
 def index_fields(request):
     userform = FormsList()
     return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+#                                             6.4. Настройка формы и её полей. Стр. 212 - 232.
+#                                         6.4.1. Изменение внешнего вида поля с помощью параметра wiget. Стр. 212 - 213.
+def index_fields_wiget(request):
+    userform = WigetFieldForm()
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+#                                         6.4.2. Задание начальных значений полей с помощью свойства initial. Стр. 214.
+def index_fields_initial(request):
+    userform = InitialFieldForm()
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+#                                         6.4.3. Задание порядка следования полей на форме. Стр. 214 - 216.
+def index_fields_order_in_form(request):  # 1)
+    userform = OrderFieldForm()
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+def index_fields_order_in_view(request):  # 2)
+    userform = InitialFieldForm(field_order = ["age", "name"])
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+#                                         6.4.4. Задание подсказок к полям формы. Стр. 216 - 217.
+def index_fields_help(request):
+    userform = HelpFieldForm()
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+#                                         6.4.5. Настройки вида формы. Стр. 217 - 218.
+def index_set_view_form(request):
+    userform = ViewForm()
+    return render(request, "firstapp/index_view_form.html", context={"form": userform})

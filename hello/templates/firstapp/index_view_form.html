@@ -1,0 +1,36 @@
+                        <!-- 6.4.5. Настройки вида формы. Стр. 217 - 218. -->
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta content="text/html; charset=utf-8">
+    <title>Форма Django!</title>
+  </head>
+  <body>
+    <h2>Форма как таблица.</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <table>
+          {{ form.as_table }}
+      </table>
+      <input type="submit" value="Отправить">
+    </form>
+    <br>
+    <h2>Форма как список.</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <ul>
+          {{ form.as_ul }}
+      </ul>
+      <input type="submit" value="Отправить">
+    </form>
+    <br>
+    <h2>Форма как параграф.</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <div>
+          {{ form.as_p }}
+      </div>
+      <input type="submit" value="Отправить">
+    </form>
+  </body>
+</html>
