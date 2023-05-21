@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.template.response import TemplateResponse
 
-from firstapp.forms import UserForm
+from firstapp.forms import UserForm, FormsList
 
 
 # Create your views here.
@@ -123,8 +123,13 @@ def special_tags(request):
 
 
 #                                             6.1. Определение форм. Стр. 172 - 177.
-#                                             6.2. Использование в формах POST-запросов. Стр. 177 - 179.
 def index_form(request):
+    userform = UserForm()
+    return render(request, "firstapp/index_form.html", context={"form": userform})
+
+
+#                                             6.2. Использование в формах POST-запросов. Стр. 177 - 179.
+def index_out(request):
     if request.method == "POST":
         name = request.POST.get("name")       # получить значение поля Имя.
         age = request.POST.get("age")         # получить значение поля Возраст.
@@ -132,4 +137,10 @@ def index_form(request):
         return HttpResponse(output)
     else:
         userform = UserForm()
-    return render(request, "firstapp/index_form.html", context={"form": userform})
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+#                                             6.3. Использование полей в формах Django. Стр. 179 - 212.
+def index_fields(request):
+    userform = FormsList()
+    return render(request, "firstapp/index_out.html", context={"form": userform})

@@ -74,6 +74,9 @@ urlpatterns = [
     #                                      5.6. Использование специальных тегов в шаблонах HTML-страниц. Стр. 164 - 171.
     path('special_tags/', views.special_tags),
     #                                         6.1. Определение форм. Стр. 172 - 177.
+    path('index_form/', views.index_form),
     #                                         6.2. Использование в формах POST-запросов. Стр. 177 - 179.
-    path('index_out', views.index_form),
+    path('index_out/', views.index_out),
+    #                                         6.3. Использование полей в формах Django. Стр. 179 - 212.
+    path('index_fields/', views.index_fields),
 ]
