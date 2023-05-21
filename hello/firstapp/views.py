@@ -95,12 +95,17 @@ def home_styles(request):    # Отображение шаблона класс�
 #                                           5.5.3. Использование класса TemplateView для вызова шаблонов. Стр 154 - 158.
 #   view-функция не требуется. Ответ формируется прямо в диспетчере URL-адресов.
 def index(request):
-    # return render(request, "firstapp/home.html")
     return render(request, "firstapp/home_styles.html")
 
-# def home_simple_class_template(request):    # Отображение шаблона классом 'TemplateResponse'.
-#     return TemplateResponse(request, "firstapp/home_simple.html")
+
+#                                    5.5.5. Расширение шаблонов HTML-страниц на основе базового шаблона. Стр. 161 - 164.
+def index_with_base(request):
+    return render(request, "firstapp/index_with_base.html")
 
 
-def index_wth_base(request):
-    return render(request, "firstapp/index_wth_base.html")
+def about_with_base(request):
+    return render(request, "firstapp/about_with_base.html")
+
+
+def contact_with_base(request):
+    return render(request, "firstapp/contact_with_base.html")

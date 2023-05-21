@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta content="text/html; charset=utf-8">
-  <title>Привет Django!</title>
-</head>
-<body>
-  <h1>Контактные данные компании</h1>
-  <h2>"Интеллектуальные программные системы."</h2>
-  <h3>{{ work }}</h3>
-  <h3>Адрес: г. Москва, ул. Короленко, д. 24</h3>
-  <h4>templates/firstapp/contact.html</h4>
-</body>
-</html>
+                  <!-- 5.5.5. Расширение шаблонов HTML-страниц на основе базового шаблона. Стр. 161 - 164. -->
+{% extends 'firstapp/base.html' %}
+{% block title %}Contact{% endblock title %}
+{% block header %}Контактные данные компании{% endblock header %}
+{% block content %}
+  <p>"Интеллектуальные программные системы."</p>
+  <p>{{ work }}</p>
+  <p>Адрес: г. Москва, ул. Короленко, д. 24</p>
+  <p>Связка шаблонов contact_with_base.html и base.html</p>
+{% endblock content %}

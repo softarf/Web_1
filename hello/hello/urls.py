@@ -49,7 +49,7 @@ urlpatterns = [
     path('redirect/contact/', views.contact_redirect),
     path('redirect/details/', views.details_redirect),
     #                                         5.1. Создание и использование шаблонов.
-    path('simple/', views.index_simple),             # "Общий шаблон". Стр 128 - 134.
+    path('index_simple/', views.index_simple),       # "Общий шаблон". Стр 128 - 134.
     path('home_simple/', views.home_simple),         # "Шаблон приложения". Стр 135 - 137.
     #                                         5.2. Класс TemplateResponse. Стр. 137 - 138.
     path('home_simple_class/', views.home_simple),         # "Шаблон приложения". Стр 135 - 137.
@@ -61,16 +61,14 @@ urlpatterns = [
     #                                         5.5.2. Использование статичных файлов... Стр 148 - 152.
     path('home_styles/', views.home_styles),
     #                                       5.5.3. Использование класса TemplateView для вызова шаблонов. Стр 154 - 158.
-    path('', views.index),
-    path('about_class_as_view/', TemplateView.as_view(template_name='firstapp/about_not_base.html')),
-    path('contact_class_as_view/', TemplateView.as_view(template_name='firstapp/contact_not_base.html')),
-    path('contact_class_with_data/', TemplateView.as_view(
+    path('templ_as_view/', views.index),
+    path('templ_as_view/about/', TemplateView.as_view(template_name='firstapp/about_not_base.html')),
+    path('templ_as_view/contact/', TemplateView.as_view(template_name='firstapp/contact_not_base.html')),
+    path('templ_as_view/contact_with_data/', TemplateView.as_view(
             template_name='firstapp/contact_not_base.html',
-            extra_context={"work": "Разработка программных продуктов."})
-    ),
-
-
-    path('about_class_templ/', TemplateView.as_view(template_name='firstapp/about_not_base.html')),
-    # path('index_old/', views.index_old),
-    # path('with_base/', views.index_wth_base),
+            extra_context={"work": "Разработка программных продуктов."})),
+#                                    5.5.5. Расширение шаблонов HTML-страниц на основе базового шаблона. Стр. 161 - 164.
+    path('with_base/', views.index_with_base),
+    path('with_base/about/', views.about_with_base),
+    path('with_base/contact/', views.contact_with_base),
 ]
