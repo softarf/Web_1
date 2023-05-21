@@ -109,3 +109,12 @@ def about_with_base(request):
 
 def contact_with_base(request):
     return render(request, "firstapp/contact_with_base.html")
+
+
+#                                          5.6. Использование специальных тегов в шаблонах HTML-страниц. Стр. 164 - 171.
+def special_tags(request):
+    data = {
+        "age": 56,
+        "cats": ["Ноутбуки", "Принтеры", "Сканеры", "Диски", "Шнуры"],
+    }
+    return render(request, "firstapp/special_tags.html", context=data)

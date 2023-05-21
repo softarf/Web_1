@@ -67,8 +67,10 @@ urlpatterns = [
     path('templ_as_view/contact_with_data/', TemplateView.as_view(
             template_name='firstapp/contact_not_base.html',
             extra_context={"work": "Разработка программных продуктов."})),
-#                                    5.5.5. Расширение шаблонов HTML-страниц на основе базового шаблона. Стр. 161 - 164.
+    #                                5.5.5. Расширение шаблонов HTML-страниц на основе базового шаблона. Стр. 161 - 164.
     path('with_base/', views.index_with_base),
     path('with_base/about/', views.about_with_base),
     path('with_base/contact/', views.contact_with_base),
+    #                                      5.6. Использование специальных тегов в шаблонах HTML-страниц. Стр. 164 - 171.
+    path('special_tags/', views.special_tags),
 ]
