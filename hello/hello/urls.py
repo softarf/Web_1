@@ -14,19 +14,63 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
+from django.views.generic import TemplateView
 
 from firstapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    path('', views.index, name='home'),
-    path('about/', views.about, name='about'),
-    path('contact/', views.contact, name='contact'),
-    path('products/<int:product_id>/', views.products, name='products'),
-    path('products/', views.products, name='products'),
-    path('users/<int:user_id>/<name>/', views.users, name='users'),
-    path('users/', views.users, name='users'),
-    path('details/', views.details, name='details'),
+    path('hello/', views.index_hello),      # 3.4 Первое приложение на Django. Стр 102.
+    #                                         4.1 Обработка запросов пользователей. Стр 106.
+    path('first_request/', views.index_request),
+    path('first_request/about/', views.about_request),
+    path('first_request/contact/', views.contact_request),
+    #                                        4.2 Маршрутизация запросов пользователя в функции re_path. Стр 110.
+    path('re_pattr/', views.index_request),                # Распознавание адреса URL с помощью регулярного выражения.
+    re_path(r'^re_pattr/about', views.about_request, name='about'),
+    re_path(r'^re_pattr/contact', views.contact_request, name='contact'),
+    #                                         4.5. Параметры представлений (задаются в строке URL).
+    #                                         4.5.1. Определение параметров через функцию 're_path()'. Стр 114 - 117.
+    re_path(r'^re_pattr/products/(?P<product_id>\d+)/', views.products_view_params),
+    re_path(r'^re_pattr/products/$', views.products_view_params),    # По умолчанию.
+    re_path(r'^re_pattr/users/(?P<user_id>\d+)/(?P<name>\D+)/', views.users_view_params),
+    re_path(r'^re_pattr/users/$', views.users_view_params),          # По умолчанию.
+    #                                         4.5.2. Определение параметров через функцию 'path()'. Стр 118 - 119.
+    path('view_params/products/<int:product_id>/', views.products_view_params),
+    path('view_params/products/', views.products_view_params),       # По умолчанию. 4.5.3... Стр 119 - 121.
+    path('view_params/users/<int:user_id>/<name>/', views.users_view_params),
+    path('view_params/users/', views.users_view_params),             # По умолчанию. 4.5.3... Стр 119 - 121.
+    #                                         4.6. Параметры строки запроса пользователя. Стр 121 - 123.
+    path('query_string/products/<int:product_id>/', views.products_query_string_params),
+    path('query_string/products/', views.products_query_string_params),    # По умолчанию.
+    path('query_string/users/', views.users_query_string_params),
+    #                                         4.7.1. Переадресация. Стр 124 - 125.
+    path('redirect/contact/', views.contact_redirect),
+    path('redirect/details/', views.details_redirect),
+    #                                         5.1. Создание и использование шаблонов.
+    path('index_simple/', views.index_simple),       # "Общий шаблон". Стр 128 - 134.
+    path('home_simple/', views.home_simple),         # "Шаблон приложения". Стр 135 - 137.
+    #                                         5.2. Класс TemplateResponse. Стр. 137 - 138.
+    path('home_simple_class/', views.home_simple),         # "Шаблон приложения". Стр 135 - 137.
+    #                                         5.3. Передача данных в шаблоны. Стр 138 - 140.
+    path('index_data/', views.index_data),
+    #                                         5.4. Передача в шаблон сложных данных. Стр 141 - 143.
+    path('complex_data/', views.index_complex_data),
+    #                                         5.5.1. Основы каскадных таблиц стилей. Стр 143 - 145.
+    #                                         5.5.2. Использование статичных файлов... Стр 148 - 152.
+    path('home_styles/', views.home_styles),
+    #                                       5.5.3. Использование класса TemplateView для вызова шаблонов. Стр 154 - 158.
+    path('templ_as_view/', views.index),
+    path('templ_as_view/about/', TemplateView.as_view(template_name='firstapp/about_not_base.html')),
+    path('templ_as_view/contact/', TemplateView.as_view(template_name='firstapp/contact_not_base.html')),
+    path('templ_as_view/contact_with_data/', TemplateView.as_view(
+            template_name='firstapp/contact_not_base.html',
+            extra_context={"work": "Разработка программных продуктов."})),
+    #                                5.5.5. Расширение шаблонов HTML-страниц на основе базового шаблона. Стр. 161 - 164.
+    path('with_base/', views.index_with_base),
+    path('with_base/about/', views.about_with_base),
+    path('with_base/contact/', views.contact_with_base),
+    #                                      5.6. Использование специальных тегов в шаблонах HTML-страниц. Стр. 164 - 171.
+    path('special_tags/', views.special_tags),
 ]

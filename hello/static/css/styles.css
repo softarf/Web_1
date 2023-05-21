@@ -1,0 +1,17 @@
+/* static/css/styles.css */
+                     /* НЕ применяется */
+h1 {
+    color: blue;
+}
+                     /* НЕ применяется */
+h2 {
+    color: orange;
+}
+                     /* Применяется */
+h3 {
+    color: red;
+}
+                     /* Применяется */
+img {
+    width: 600px;
+}

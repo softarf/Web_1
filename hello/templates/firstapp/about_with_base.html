@@ -1,0 +1,8 @@
+                  <!-- 5.5.5. Расширение шаблонов HTML-страниц на основе базового шаблона. Стр. 161 - 164. -->
+{% extends 'firstapp/base.html' %}
+{% block title %}About{% endblock title %}
+{% block header %}Сведения о компании{% endblock header %}
+{% block content %}
+  <p>"Интеллектуальные программные системы."</p>
+  <p>Связка шаблонов about_with_base.html и base.html</p>
+{% endblock content %}
