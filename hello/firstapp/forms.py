@@ -185,3 +185,11 @@ class HelpFieldForm(forms.Form):
 class ViewForm(forms.Form):
     name = forms.CharField(label="Имя")
     age = forms.IntegerField(label="Возраст", required=False)
+
+
+#                                         6.4.6. Проверка (валидация) данных. Стр. 218 - 223.
+class ValidForm(forms.Form):
+    name = forms.CharField(label="Имя", min_length=2, max_length=20)
+    age = forms.IntegerField(label="Возраст", min_value=1, max_value=120, required=False)
+    weight = forms.DecimalField(label="Вес", min_value=3, max_value=200, decimal_places=2, required=False)
+    advertis = forms.BooleanField(label="Согласны получать рекламу", required=False)

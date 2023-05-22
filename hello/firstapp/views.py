@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanen
 from django.template.response import TemplateResponse
 
 from firstapp.forms import UserForm, FormsList, WigetFieldForm, InitialFieldForm, OrderFieldForm
-from firstapp.forms import HelpFieldForm, ViewForm
+from firstapp.forms import HelpFieldForm, ViewForm, ValidForm
 
 
 # Create your views here.
@@ -181,3 +181,18 @@ def index_fields_help(request):
 def index_set_view_form(request):
     userform = ViewForm()
     return render(request, "firstapp/index_view_form.html", context={"form": userform})
+
+
+#                                         6.4.6. Проверка (валидация) данных. Стр. 218 - 223.
+def index_valid(request):
+    if request.method == "POST":
+        userform = ValidForm(request.POST)
+        if userform.is_valid():
+            # name = request.POST.get("name")    # Так получал значение поля "Имя" РАНЬШЕ.
+            name = userform.cleaned_data["name"]       # Получить значение поля "Имя".
+            return HttpResponse(f"<h2>Имя введено корректно - {name}</h2>")
+        else:
+            return HttpResponse("<h2>Ошибка ввода данных</h2>")
+    else:
+        userform = ValidForm()
+    return render(request, "firstapp/index_table.html", context={"form": userform})
