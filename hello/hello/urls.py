@@ -92,4 +92,6 @@ urlpatterns = [
     path('view_form/', views.index_set_view_form),
     #                                     6.4.6. Проверка (валидация) данных. Стр. 218 - 223.
     path('valid/', views.index_valid),
+    #                                     6.4.7. Детальная настройка полей формы. Стр. 223 - 227.
+    path('set_fields/', views.index_set_fields),
 ]

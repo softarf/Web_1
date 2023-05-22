@@ -1,0 +1,28 @@
+                        <!-- 6.4.7. Детальная настройка полей формы. Стр. 223 - 227. -->
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta content="text/html; charset=utf-8">
+    <title>Форма Django!</title>
+  </head>
+  <body>
+    <h2>Валидация группы полей.</h2>
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      <div class="form-group">
+        {% for field in form %}
+          <div>{{ field.label_tag }}</div>
+          <div>{{ field }}</div>
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <div class="alert alert-danger">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </div>
+      <input type="submit" value="Отправить">
+    </form>
+  </body>
+</html>

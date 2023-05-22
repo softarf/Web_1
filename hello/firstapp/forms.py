@@ -193,3 +193,9 @@ class ValidForm(forms.Form):
     age = forms.IntegerField(label="Возраст", min_value=1, max_value=120, required=False)
     weight = forms.DecimalField(label="Вес", min_value=3, max_value=200, decimal_places=2, required=False)
     advertis = forms.BooleanField(label="Согласны получать рекламу", required=False)
+
+
+#                                         6.4.7. Детальная настройка полей формы. Стр. 223 - 227.
+class SetFieldsForm(forms.Form):
+    name = forms.CharField(label="Имя клиента", min_length=2, max_length=20)
+    age = forms.IntegerField(label="Возраст клиента", min_value=1, max_value=120)

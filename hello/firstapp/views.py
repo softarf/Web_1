@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanen
 from django.template.response import TemplateResponse
 
 from firstapp.forms import UserForm, FormsList, WigetFieldForm, InitialFieldForm, OrderFieldForm
-from firstapp.forms import HelpFieldForm, ViewForm, ValidForm
+from firstapp.forms import HelpFieldForm, ViewForm, ValidForm, SetFieldsForm
 
 
 # Create your views here.
@@ -196,3 +196,16 @@ def index_valid(request):
     else:
         userform = ValidForm()
     return render(request, "firstapp/index_table.html", context={"form": userform})
+
+
+#                                         6.4.7. Детальная настройка полей формы. Стр. 223 - 227.
+def index_set_fields(request):
+    userform = SetFieldsForm()
+    if request.method == "POST":
+        userform = SetFieldsForm(request.POST)
+        if userform.is_valid():
+            # name = request.POST.get("name")    # Так получал значение поля "Имя" РАНЬШЕ.
+            name = userform.cleaned_data["name"]       # Получить значение поля "Имя".
+            age = userform.cleaned_data["age"]         # Получить значение поля "Возраст".
+            return HttpResponse(f"<h2>Данные введены корректно.</h2><h3>Имя - {name}, Возраст - {age}</h3>")
+    return render(request, "firstapp/index_fields_attr.html", context={"form": userform})
