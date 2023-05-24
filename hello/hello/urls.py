@@ -94,4 +94,6 @@ urlpatterns = [
     path('valid/', views.index_valid),
     #                                     6.4.7. Детальная настройка полей формы. Стр. 223 - 227.
     path('set_fields/', views.index_set_fields),
+    #                                     6.4.8. Присвоение стилей полям формы. Стр. 227 - 232.
+    path('fields_css/', views.index_fields_css),     # 1)
 ]

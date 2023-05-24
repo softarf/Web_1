@@ -1,0 +1,54 @@
+                        <!-- 6.4.8. Присвоение стилей полям формы. Стр. 227 - 232. -->
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+  <head>
+    <meta content="text/html; charset=utf-8">
+    <title>Форма Django!</title>
+    <link rel="stylesheet" href="{% static 'css/styles_fields_css.css' %}" >
+  </head>
+  <body>
+    <h2>1) Присвоение стилей полям, напрямую тегам, средствами разметки.</h2>
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      <div class="form-group">
+        {% for field in form %}
+          <div>{{ field.label_tag }}</div>
+          <div>{{ field }}</div>
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <div class="alert alert-danger">
+                {{ error }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </div>
+      <br>
+      <input type="submit" value="Отправить">
+    </form>
+    <br>
+    <h2>2) Присвоение стилей полям через свойства формы 'required_css_class' и 'error_css_class'.</h2>
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      <table>
+        {{ form.as_table }}
+      </table>
+      <input type="submit" value="Отправить">
+    </form>
+    <br>
+    <h2>3) Присвоение стилей полям через свойства виджета.</h2>
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      <div>
+        {% for field in form %}
+        <div class="row">
+          <div>{{ field.label_tag }}</div>
+          <div class="col-md-10">{{ field }}</div>
+        </div>
+        {% endfor %}
+      </div>
+      <input type="submit" value="Отправить">
+    </form>
+  </body>
+</html>

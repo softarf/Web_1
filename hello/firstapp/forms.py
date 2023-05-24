@@ -199,3 +199,13 @@ class ValidForm(forms.Form):
 class SetFieldsForm(forms.Form):
     name = forms.CharField(label="Имя клиента", min_length=2, max_length=20)
     age = forms.IntegerField(label="Возраст клиента", min_value=1, max_value=120)
+
+
+#                                         6.4.8. Присвоение стилей полям формы. Стр. 227 - 232.
+class FieldStylesForm(forms.Form):
+    name = forms.CharField(label="Имя клиента", min_length=2, max_length=20,         # 1)
+                             widget=forms.TextInput(attrs={"class": "myfield"}))        # 3)
+    age = forms.IntegerField(label="Возраст клиента", min_value=1, max_value=120,    # 1)
+                             widget=forms.NumberInput(attrs={"class": "myfield"}))      # 3)
+    required_css_class = "field"                                                # 2)
+    error_css_class = "error"                                                   # 2)
