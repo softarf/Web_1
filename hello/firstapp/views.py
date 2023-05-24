@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.template.response import TemplateResponse
 
+from firstapp.forms import UserForm, FormsList, WigetFieldForm, InitialFieldForm, OrderFieldForm
+from firstapp.forms import HelpFieldForm, ViewForm, ValidForm, SetFieldsForm, FieldStylesForm
+
 
 # Create your views here.
 
@@ -118,3 +121,104 @@ def special_tags(request):
         "cats": ["Ноутбуки", "Принтеры", "Сканеры", "Диски", "Шнуры"],
     }
     return render(request, "firstapp/special_tags.html", context=data)
+
+
+#                                             6.1. Определение форм. Стр. 172 - 177.
+def index_form(request):
+    userform = UserForm()
+    return render(request, "firstapp/index_form.html", context={"form": userform})
+
+
+#                                             6.2. Использование в формах POST-запросов. Стр. 177 - 179.
+def index_out(request):
+    if request.method == "POST":
+        name = request.POST.get("name")       # получить значение поля Имя.
+        age = request.POST.get("age")         # получить значение поля Возраст.
+        output = f"<h2>Пользователь</h2><h3>Имя - {name}, Возраст - {age}</h3>"
+        return HttpResponse(output)
+    else:
+        userform = UserForm()
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+#                                             6.3. Использование полей в формах Django. Стр. 179 - 212. 232
+def index_fields(request):
+    userform = FormsList()
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+#                                             6.4. Настройка формы и её полей. Стр. 212 - 232.
+#                                         6.4.1. Изменение внешнего вида поля с помощью параметра wiget. Стр. 212 - 213.
+def index_fields_wiget(request):
+    userform = WigetFieldForm()
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+#                                         6.4.2. Задание начальных значений полей с помощью свойства initial. Стр. 214.
+def index_fields_initial(request):
+    userform = InitialFieldForm()
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+#                                         6.4.3. Задание порядка следования полей на форме. Стр. 214 - 216.
+def index_fields_order_in_form(request):  # 1)
+    userform = OrderFieldForm()
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+def index_fields_order_in_view(request):  # 2)
+    userform = InitialFieldForm(field_order = ["age", "name"])
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+#                                         6.4.4. Задание подсказок к полям формы. Стр. 216 - 217.
+def index_fields_help(request):
+    userform = HelpFieldForm()
+    return render(request, "firstapp/index_out.html", context={"form": userform})
+
+
+#                                         6.4.5. Настройки вида формы. Стр. 217 - 218.
+def index_set_view_form(request):
+    userform = ViewForm()
+    return render(request, "firstapp/index_view_form.html", context={"form": userform})
+
+
+#                                         6.4.6. Проверка (валидация) данных. Стр. 218 - 223.
+def index_valid(request):
+    if request.method == "POST":
+        userform = ValidForm(request.POST)
+        if userform.is_valid():
+            # name = request.POST.get("name")    # Так получал значение поля "Имя" РАНЬШЕ.
+            name = userform.cleaned_data["name"]       # Получить значение поля "Имя".
+            return HttpResponse(f"<h2>Имя введено корректно - {name}</h2>")
+        else:
+            return HttpResponse("<h2>Ошибка ввода данных</h2>")
+    else:
+        userform = ValidForm()
+    return render(request, "firstapp/index_table.html", context={"form": userform})
+
+
+#                                         6.4.7. Детальная настройка полей формы. Стр. 223 - 227.
+def index_set_fields(request):
+    userform = SetFieldsForm()
+    if request.method == "POST":
+        userform = SetFieldsForm(request.POST)
+        if userform.is_valid():
+            # name = request.POST.get("name")    # Так получал значение поля "Имя" РАНЬШЕ.
+            name = userform.cleaned_data["name"]       # Получить значение поля "Имя".
+            age = userform.cleaned_data["age"]         # Получить значение поля "Возраст".
+            return HttpResponse(f"<h2>Данные введены корректно.</h2><h3>Имя - {name}, Возраст - {age}</h3>")
+    return render(request, "firstapp/index_fields_attr.html", context={"form": userform})
+
+
+#                                         6.4.8. Присвоение стилей полям формы. Стр. 227 - 232.
+def index_fields_css(request):
+    userform = FieldStylesForm()
+    if request.method == "POST":
+        userform = FieldStylesForm(request.POST)
+        if userform.is_valid():
+            # name = request.POST.get("name")    # Так получал значение поля "Имя" РАНЬШЕ.
+            name = userform.cleaned_data["name"]       # Получить значение поля "Имя".
+            age = userform.cleaned_data["age"]         # Получить значение поля "Возраст".
+            return HttpResponse(f"<h2>Данные введены корректно.</h2><h3>Имя - {name}, Возраст - {age}</h3>")
+    return render(request, "firstapp/index_fields_css.html", context={"form": userform})

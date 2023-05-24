@@ -73,4 +73,27 @@ urlpatterns = [
     path('with_base/contact/', views.contact_with_base),
     #                                      5.6. Использование специальных тегов в шаблонах HTML-страниц. Стр. 164 - 171.
     path('special_tags/', views.special_tags),
+    #                                         6.1. Определение форм. Стр. 172 - 177.
+    path('index_form/', views.index_form),
+    #                                         6.2. Использование в формах POST-запросов. Стр. 177 - 179.
+    path('index_out/', views.index_out),
+    #                                         6.3. Использование полей в формах Django. Стр. 179 - 212.
+    path('index_fields/', views.index_fields),
+    #                                     6.4.1. Изменение внешнего вида поля с помощью параметра wiget. Стр. 212 - 213.
+    path('fields_wiget/', views.index_fields_wiget),
+    #                                     6.4.2. Задание начальных значений полей с помощью свойства initial. Стр. 214.
+    path('fields_initial/', views.index_fields_initial),
+    #                                     6.4.3. Задание порядка следования полей на форме. Стр. 214 - 216.
+    path('order_in_form/', views.index_fields_order_in_form),  # 1)
+    path('order_in_view/', views.index_fields_order_in_view),  # 2)
+    #                                     6.4.4. Задание подсказок к полям формы. Стр. 216 - 217.
+    path('fields_help/', views.index_fields_help),
+    #                                     6.4.5. Настройки вида формы. Стр. 217 - 218.
+    path('view_form/', views.index_set_view_form),
+    #                                     6.4.6. Проверка (валидация) данных. Стр. 218 - 223.
+    path('valid/', views.index_valid),
+    #                                     6.4.7. Детальная настройка полей формы. Стр. 223 - 227.
+    path('set_fields/', views.index_set_fields),
+    #                                     6.4.8. Присвоение стилей полям формы. Стр. 227 - 232.
+    path('fields_css/', views.index_fields_css),     # 1)
 ]
