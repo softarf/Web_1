@@ -96,4 +96,5 @@ urlpatterns = [
     path('set_fields/', views.index_set_fields),
     #                                     6.4.8. Присвоение стилей полям формы. Стр. 227 - 232.
     path('fields_css/', views.index_fields_css),     # 1)
+    #                                     7.1. Создание моделей и миграции базы данных. Стр. 233 - 238.
 ]

@@ -222,3 +222,7 @@ def index_fields_css(request):
             age = userform.cleaned_data["age"]         # Получить значение поля "Возраст".
             return HttpResponse(f"<h2>Данные введены корректно.</h2><h3>Имя - {name}, Возраст - {age}</h3>")
     return render(request, "firstapp/index_fields_css.html", context={"form": userform})
+
+
+#                                         7.1. Создание моделей и миграции базы данных. Стр. 233 - 238.
+#                                              Поля для ввода имени и возраста создаются тегами <input>.
