@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.template.response import TemplateResponse
 
 from firstapp.forms import UserForm, FormsList, WigetFieldForm, InitialFieldForm, OrderFieldForm
@@ -229,7 +230,6 @@ def index_fields_css(request):
 #                                              Поля для ввода имени и возраста создаются тегами <input>.
 #                                         7.4. Пример работы с объектами модели данных:
 #                                              Чтение и запись информации в БД. Стр. 246 - 250.
-#                                         7.5. Редактирование и удаление информации из БД. Стр. 250 - 256.
 def index_read(request):
     people = Person.objects.all()
     return render(request, "firstapp/index_crud.html", context={"people": people})
@@ -237,8 +237,33 @@ def index_read(request):
 
 def save_in_db(request):
     if request.method == "POST":
-        cliet = Person()
-        cliet.name = request.POST.get("name")       # Получает значение поля "Имя".
-        cliet.age = request.POST.get("age")         # Получает значение поля "Возраст".
-        cliet.save()
-    return HttpResponseRedirect("read/")
+        client = Person()
+        client.name = request.POST.get("name")       # Получает значение поля "Имя".
+        client.age = request.POST.get("age")         # Получает значение поля "Возраст".
+        client.save()
+    return HttpResponseRedirect("/read")
+
+
+#                                         7.5. Пример работы с объектами модели данных:
+#                                              Редактирование и удаление информации из БД. Стр. 250 - 256.
+def edit_in_db(request, id):
+    try:
+        person = Person.objects.get(id=id)
+        if request.method == "POST":
+            person.name = request.POST.get("name")
+            person.age = request.POST.get("age")
+            person.save()
+            return HttpResponseRedirect("/read")
+        else:
+            return render(request, "firstapp/edit_db.html", context={"person": person})
+    except Person.DoesNotExist:
+        return HttpResponseNotFound("<h2>Клиент не найден.</h2>")
+
+
+def delete_in_db(request, id):
+    try:
+        person = Person.objects.get(id=id)
+        person.delete()
+        return HttpResponseRedirect("/read")
+    except Person.DoesNotExist:
+        return HttpResponseNotFound("<h2>Клиент не найден.</h2>")

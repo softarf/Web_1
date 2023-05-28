@@ -10,3 +10,4 @@ class Person(models.Model):
     age = models.IntegerField()
     #
     objects = models.Manager()          # Диспетчер записей. Для PyCharm Community объявлять явно.
+    DoesNotExist = models.Manager       # Собственное исключение. Для PyCharm Community объявлять явно.

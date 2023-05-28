@@ -99,5 +99,8 @@ urlpatterns = [
     #                                     7.1. Создание моделей и миграции базы данных. Стр. 233 - 238.
     #                     7.4. Пример работы с объектами модели данных: Чтение и запись информации в БД. Стр. 246 - 250.
     path('read/', views.index_read),
-    path('create/', views.save_in_db),
+    path('read/create/', views.save_in_db),
+    #          7.5. Пример работы с объектами модели данных: Редактирование и удаление информации из БД. Стр. 250 - 256.
+    path('read/edit/<int:id>', views.edit_in_db),
+    path('read/delete/<int:id>', views.delete_in_db),
 ]

@@ -1,0 +1,22 @@
+                        <!-- 7.5. Редактирование и удаление информации из БД. Стр. 250 - 256. -->
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta content="text/html; charset=utf-8">
+    <title>Модели в Django</title>
+  </head>
+  <body class="container">
+    <form method="POST">
+      {% csrf_token %}
+      <p>
+        <label>Введите имя</label><br>
+        <input type="text" name="name" value="{{ person.name }}" />
+      </p>
+      <p>
+        <label>Введите возраст</label><br>
+        <input type="number" name="age" value="{{ person.age }}" />
+      </p>
+      <input type="submit" value="Сохранить">
+    </form>
+  </body>
+</html>
