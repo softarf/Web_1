@@ -4,6 +4,7 @@ from django.template.response import TemplateResponse
 
 from firstapp.forms import UserForm, FormsList, WigetFieldForm, InitialFieldForm, OrderFieldForm
 from firstapp.forms import HelpFieldForm, ViewForm, ValidForm, SetFieldsForm, FieldStylesForm
+from firstapp.models import Person
 
 
 # Create your views here.
@@ -226,3 +227,18 @@ def index_fields_css(request):
 
 #                                         7.1. Создание моделей и миграции базы данных. Стр. 233 - 238.
 #                                              Поля для ввода имени и возраста создаются тегами <input>.
+#                                         7.4. Пример работы с объектами модели данных:
+#                                              Чтение и запись информации в БД. Стр. 246 - 250.
+#                                         7.5. Редактирование и удаление информации из БД. Стр. 250 - 256.
+def index_read(request):
+    people = Person.objects.all()
+    return render(request, "firstapp/index_crud.html", context={"people": people})
+
+
+def save_in_db(request):
+    if request.method == "POST":
+        cliet = Person()
+        cliet.name = request.POST.get("name")       # Получает значение поля "Имя".
+        cliet.age = request.POST.get("age")         # Получает значение поля "Возраст".
+        cliet.save()
+    return HttpResponseRedirect("read/")
