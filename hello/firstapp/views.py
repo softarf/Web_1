@@ -267,3 +267,5 @@ def delete_in_db(request, id):
         return HttpResponseRedirect("/read")
     except Person.DoesNotExist:
         return HttpResponseNotFound("<h2>Клиент не найден.</h2>")
+
+    # TODO: Повторить параграфы 6.4.6., 6.4.7., 6.4.8., 7.4. и 7.5.

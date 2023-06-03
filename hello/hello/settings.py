@@ -62,7 +62,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR,],     # Путь до шаблонов
+        'DIRS': [TEMPLATE_DIR, ],     # Путь до шаблонов
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -143,4 +143,6 @@ STATICFILES_DIRS = [
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
+# Назначает класс для ключей 'pk', создающихся в моделях проекта по автоматически.
+# Можно также объявить в 'school/apps.py'.
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
