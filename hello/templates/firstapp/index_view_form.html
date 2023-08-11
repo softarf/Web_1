@@ -6,16 +6,17 @@
     <title>Форма Django!</title>
   </head>
   <body>
-    <h2>Форма как таблица.</h2>
+    <h1>Представления форм:</h1>
+    <h2>1. Форма как таблица</h2>
     <form method="POST">
       {% csrf_token %}
       <table>
-          {{ form.as_table }}
+          {{ form.as_table }}    <!-- По умолчанию. -->
       </table>
       <input type="submit" value="Отправить">
     </form>
     <br>
-    <h2>Форма как список.</h2>
+    <h2>2. Форма как список</h2>
     <form method="POST">
       {% csrf_token %}
       <ul>
@@ -24,7 +25,7 @@
       <input type="submit" value="Отправить">
     </form>
     <br>
-    <h2>Форма как параграф.</h2>
+    <h2>3. Форма как параграф</h2>
     <form method="POST">
       {% csrf_token %}
       <div>

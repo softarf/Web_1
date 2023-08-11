@@ -1,4 +1,3 @@
-
 from django import forms
 
 
@@ -14,7 +13,7 @@ class UserForm(forms.Form):
 #                                             6.3. Использование полей в формах Django. Стр. 179 - 212.
 class FormsList(forms.Form):
     basket = forms.BooleanField(label="Положить товар в корзину", required=False)
-    # HTML: <input type="text">
+    # HTML: <input type="checkbox">
 
     vyb = forms.NullBooleanField(label="Вы поедете в Сочи этим летом?")
     # HTML:
@@ -27,7 +26,7 @@ class FormsList(forms.Form):
     name = forms.CharField(label="Имя клиента", max_length=15, help_text="ФИО не более 15 символов")
     # HTML: <input type="text">
 
-    email = forms.EmailField(label="Электроный адрес", help_text="Обязательный символ @", required=False)
+    email = forms.EmailField(label="Электронный адрес", help_text="Обязательный символ @", required=False)
     # HTML: <input type="email">
 
     ip_adres = forms.GenericIPAddressField(label="IP адрес", help_text="Пример формата 192.0.2.0", required=False)
@@ -79,7 +78,7 @@ class FormsList(forms.Form):
     time_delta = forms.DurationField(label="Введите промежуток времени", required=False)
     # HTML: <input type="text">
 
-    date_and_time = forms.SplitDateTimeField(label="Введите дату и время", required=False)
+    date_and_time = forms.SplitDateTimeField(label="Введите отдельно дату и время", required=False)
     # HTML:
     #     <input type="text" name="_0">
     #     <input type="text" name="_1">
@@ -95,10 +94,10 @@ class FormsList(forms.Form):
     # HTML: <input type="number">
 
     ling = forms.ChoiceField(label="Выберите язык",
-                            choices=((1, "Английский"),
-                                     (2, "Немецкий"),
-                                     (3, "Французский")),
-                            required=False)
+                             choices=((1, "Английский"),
+                                      (2, "Немецкий"),
+                                      (3, "Французский")),
+                             required=False)
     # HTML:
     #     <select>
     #       <option value="1">Data 1</option>
@@ -107,11 +106,11 @@ class FormsList(forms.Form):
     #     </select>
 
     city = forms.TypedChoiceField(label="Выберите город",
-                            empty_value=None,
-                            choices=((1, "Москва"),
-                                     (2, "Воронеж"),
-                                     (3, "Курск")),
-                            required=False)
+                                  empty_value=None,
+                                  choices=((1, "Москва"),
+                                           (2, "Воронеж"),
+                                           (3, "Курск")),
+                                  required=False)
     # HTML:
     #     <select>
     #       <option value="1">Data 1</option>
@@ -132,7 +131,7 @@ class FormsList(forms.Form):
     #       <option value="3">Data 3</option>
     #     </select>
 
-    multi_city = forms.TypedMultipleChoiceField(label="Выберите страну",
+    multi_city = forms.TypedMultipleChoiceField(label="Выберите город",
                                                 empty_value=None,
                                                 choices=((1, "Москва"),
                                                          (2, "Воронеж"),
@@ -149,14 +148,14 @@ class FormsList(forms.Form):
 
 #                                             6.4. Настройка формы и её полей. Стр. 212 - 232.
 #                                         6.4.1. Изменение внешнего вида поля с помощью параметра wiget. Стр. 212 - 213.
-class WigetFieldForm(forms.Form):
+class WidgetFieldForm(forms.Form):
     name = forms.CharField(label="Имя")
     # HTML: <input type="text">
     age = forms.IntegerField(label="Возраст", required=False)
     # HTML: <input type="number">
-    comment1 = forms.CharField(label="Коментарий1", required=False)
+    comment1 = forms.CharField(label="Комментарий1", required=False)
     # HTML: <input type="text">
-    comment2 = forms.CharField(label="Коментарий2", required=False,
+    comment2 = forms.CharField(label="Комментарий2", required=False,
                                widget=forms.Textarea)
 
 
@@ -164,15 +163,16 @@ class WigetFieldForm(forms.Form):
 class InitialFieldForm(forms.Form):
     name = forms.CharField(label="Имя", initial="Введите ФИО")
     age = forms.IntegerField(label="Возраст", initial=18, required=False)
-    comment = forms.CharField(label="Коментарий", widget=forms.Textarea, required=False)
+    comment = forms.CharField(label="Комментарий", widget=forms.Textarea, required=False)
 
 
-# 1)                                      6.4.3. Задание порядка следования полей на форме. Стр. 214 - 216.
+#                                         6.4.3. Задание порядка следования полей на форме. Стр. 214 - 216.
 class OrderFieldForm(forms.Form):
     name = forms.CharField(label="Имя", initial="Введите ФИО")
     age = forms.IntegerField(label="Возраст", initial=18, required=False)
     field_order = ["age", "name"]
-# 2) Использую класс InitialFieldForm.
+    # 1) Использую класс OrderFieldForm.
+    # 2) Использую класс InitialFieldForm.
 
 
 #                                         6.4.4. Задание подсказок к полям формы. Стр. 216 - 217.
@@ -192,7 +192,7 @@ class ValidForm(forms.Form):
     name = forms.CharField(label="Имя", min_length=2, max_length=20)
     age = forms.IntegerField(label="Возраст", min_value=1, max_value=120, required=False)
     weight = forms.DecimalField(label="Вес", min_value=3, max_value=200, decimal_places=2, required=False)
-    advertis = forms.BooleanField(label="Согласны получать рекламу", required=False)
+    adverts = forms.BooleanField(label="Согласны получать рекламу", required=False)
 
 
 #                                         6.4.7. Детальная настройка полей формы. Стр. 223 - 227.
@@ -204,8 +204,8 @@ class SetFieldsForm(forms.Form):
 #                                         6.4.8. Присвоение стилей полям формы. Стр. 227 - 232.
 class FieldStylesForm(forms.Form):
     name = forms.CharField(label="Имя клиента", min_length=2, max_length=20,         # 1)
-                             widget=forms.TextInput(attrs={"class": "myfield"}))        # 3)
+                           widget=forms.TextInput(attrs={"class": "myfield"}))       # 3)
     age = forms.IntegerField(label="Возраст клиента", min_value=1, max_value=120,    # 1)
-                             widget=forms.NumberInput(attrs={"class": "myfield"}))      # 3)
-    required_css_class = "field"                                                # 2)
-    error_css_class = "error"                                                   # 2)
+                             widget=forms.NumberInput(attrs={"class": "myfield"}))   # 3)
+    required_css_class = "field"                                                     # 2)
+    error_css_class = "error"                                                        # 2)

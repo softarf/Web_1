@@ -56,14 +56,16 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'hello.urls'
 
-# Здесь мы добавляем путь до шаблонов
-TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
+TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")    # Указывается путь на уровне папки конфигурации проекта.
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR, ],     # Путь до шаблонов
-        'APP_DIRS': True,
+        'DIRS': [TEMPLATE_DIR, ],      # Здесь мы добавляем путь до шаблонов.
+        # 'DIRS': [                    # Или так:
+        #     os.path.join(BASE_DIR, "templates"),
+        # ],
+        'APP_DIRS': True,              # Так же, шаблоны можно разместить внутри приложений.
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -143,6 +145,6 @@ STATICFILES_DIRS = [
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-# Назначает класс для ключей 'pk', создающихся в моделях проекта по автоматически.
-# Можно также объявить в 'school/apps.py'.
+# Назначает класс для ключей 'pk', создающихся в моделях проекта автоматически.
+# Можно также объявить в 'firstapp/apps.py'.
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.template.response import TemplateResponse
 
-from firstapp.forms import UserForm, FormsList, WigetFieldForm, InitialFieldForm, OrderFieldForm
+from firstapp.forms import UserForm, FormsList, WidgetFieldForm, InitialFieldForm, OrderFieldForm
 from firstapp.forms import HelpFieldForm, ViewForm, ValidForm, SetFieldsForm, FieldStylesForm
 from firstapp.models import Person
 
@@ -33,7 +33,7 @@ def products_view_params(request, product_id=1):
 
 
 def users_view_params(request, user_id=1, name='Андрей'):
-    output = f"<h2>Пользватель</h2><h3>id: {user_id} Имя: {name}</h3>"
+    output = f"<h2>Пользователь</h2><h3>id: {user_id} Имя: {name}</h3>"
     return HttpResponse(output)
 
 
@@ -47,7 +47,7 @@ def products_query_string_params(request, product_id=1):
 def users_query_string_params(request):            # Убрали параметры представления.
     user_id = request.GET.get("user_id", 1)        # Добавили параметры строки запроса (?user_id=3&name=Виктор).
     name = request.GET.get("name", "Андрей")
-    output = f"<h2>Пользватель</h2><h3>id: {user_id} Имя: {name}</h3>"
+    output = f"<h2>Пользователь</h2><h3>id: {user_id} Имя: {name}</h3>"
     return HttpResponse(output)
 
 
@@ -82,7 +82,7 @@ def index_data(request):                    # 5.3. Передача данных
 
 
 def index_complex_data(request):            # 5.4. Передача в шаблон сложных данных. Стр 141 - 143.
-    header = "Персональные данные (через класс)"                     # обычная переменная
+    header = "Персональные данные (через класс)"       # обычная переменная
     langs = ["Английский", "Немецкий", "Испанский"]    # список
     user = {"name": "Максим", "age": 30}               # словарь
     addr = ("Виноградная", 23, 45)                     # кортеж
@@ -134,12 +134,14 @@ def index_form(request):
 #                                             6.2. Использование в формах POST-запросов. Стр. 177 - 179.
 def index_out(request):
     if request.method == "POST":
+        # Выводит данные, полученные от пользователя:
         name = request.POST.get("name")       # получить значение поля Имя.
         age = request.POST.get("age")         # получить значение поля Возраст.
         output = f"<h2>Пользователь</h2><h3>Имя - {name}, Возраст - {age}</h3>"
         return HttpResponse(output)
-    else:
-        userform = UserForm()
+
+    # Предоставляет (пустую) форму для заполнения:
+    userform = UserForm()
     return render(request, "firstapp/index_out.html", context={"form": userform})
 
 
@@ -152,7 +154,7 @@ def index_fields(request):
 #                                             6.4. Настройка формы и её полей. Стр. 212 - 232.
 #                                         6.4.1. Изменение внешнего вида поля с помощью параметра wiget. Стр. 212 - 213.
 def index_fields_wiget(request):
-    userform = WigetFieldForm()
+    userform = WidgetFieldForm()
     return render(request, "firstapp/index_out.html", context={"form": userform})
 
 
@@ -163,13 +165,13 @@ def index_fields_initial(request):
 
 
 #                                         6.4.3. Задание порядка следования полей на форме. Стр. 214 - 216.
-def index_fields_order_in_form(request):  # 1)
+def index_fields_order_in_form(request):  # 1) Использовал форму с заданным порядком следования полей.
     userform = OrderFieldForm()
     return render(request, "firstapp/index_out.html", context={"form": userform})
 
 
-def index_fields_order_in_view(request):  # 2)
-    userform = InitialFieldForm(field_order = ["age", "name"])
+def index_fields_order_in_view(request):  # 2) Изменил порядок следования полей при вызове формы.
+    userform = InitialFieldForm(field_order=["age", "name"])
     return render(request, "firstapp/index_out.html", context={"form": userform})
 
 
@@ -182,6 +184,7 @@ def index_fields_help(request):
 #                                         6.4.5. Настройки вида формы. Стр. 217 - 218.
 def index_set_view_form(request):
     userform = ViewForm()
+    # Демонстрирует различные представления одной и той же формы.
     return render(request, "firstapp/index_view_form.html", context={"form": userform})
 
 
@@ -190,8 +193,8 @@ def index_valid(request):
     if request.method == "POST":
         userform = ValidForm(request.POST)
         if userform.is_valid():
-            # name = request.POST.get("name")    # Так получал значение поля "Имя" РАНЬШЕ.
-            name = userform.cleaned_data["name"]       # Получить значение поля "Имя".
+            # name = request.POST.get("name")       # Так получал значение атрибута "Имя" из ЗАПРОСА.
+            name = userform.cleaned_data["name"]    # Получает значение атрибута "Имя" из поля ФОРМЫ.
             return HttpResponse(f"<h2>Имя введено корректно - {name}</h2>")
         else:
             return HttpResponse("<h2>Ошибка ввода данных</h2>")
@@ -204,12 +207,15 @@ def index_valid(request):
 def index_set_fields(request):
     userform = SetFieldsForm()
     if request.method == "POST":
-        userform = SetFieldsForm(request.POST)
+        userform = SetFieldsForm(request.POST) # Передаёт данные для отображения их в полях формы.
+        # Проверяет данные в форме (на стороне клиента).
         if userform.is_valid():
-            # name = request.POST.get("name")    # Так получал значение поля "Имя" РАНЬШЕ.
-            name = userform.cleaned_data["name"]       # Получить значение поля "Имя".
-            age = userform.cleaned_data["age"]         # Получить значение поля "Возраст".
+            # name = request.POST.get("name")     # Так получал значение атрибута "Имя" из ЗАПРОСА.
+            # Получает значения атрибутов "Имя" и "Возраст" путём считывания их из полей ФОРМЫ.
+            name = userform.cleaned_data["name"]
+            age = userform.cleaned_data["age"]
             return HttpResponse(f"<h2>Данные введены корректно.</h2><h3>Имя - {name}, Возраст - {age}</h3>")
+
     return render(request, "firstapp/index_fields_attr.html", context={"form": userform})
 
 
@@ -219,9 +225,9 @@ def index_fields_css(request):
     if request.method == "POST":
         userform = FieldStylesForm(request.POST)
         if userform.is_valid():
-            # name = request.POST.get("name")    # Так получал значение поля "Имя" РАНЬШЕ.
-            name = userform.cleaned_data["name"]       # Получить значение поля "Имя".
-            age = userform.cleaned_data["age"]         # Получить значение поля "Возраст".
+            # Получает значения атрибутов "Имя" и "Возраст" путём считывания их из полей ФОРМЫ.
+            name = userform.cleaned_data["name"]
+            age = userform.cleaned_data["age"]
             return HttpResponse(f"<h2>Данные введены корректно.</h2><h3>Имя - {name}, Возраст - {age}</h3>")
     return render(request, "firstapp/index_fields_css.html", context={"form": userform})
 
