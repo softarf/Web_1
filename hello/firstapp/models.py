@@ -13,6 +13,9 @@ class Person(models.Model):
     objects = models.Manager()          # Диспетчер записей. Для PyCharm Community объявлять явно.
     DoesNotExist = models.Manager       # Собственное исключение. Для PyCharm Community объявлять явно.
 
+    def __str__(self):
+        return self.name
+
 
 #                                 7.2. Типы полей в модели данных Django. Стр. 238 - 241.
 class FieldsTypes(models.Model):

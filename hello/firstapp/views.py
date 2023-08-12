@@ -229,6 +229,7 @@ def index_fields_css(request):
             name = userform.cleaned_data["name"]
             age = userform.cleaned_data["age"]
             return HttpResponse(f"<h2>Данные введены корректно.</h2><h3>Имя - {name}, Возраст - {age}</h3>")
+
     return render(request, "firstapp/index_fields_css.html", context={"form": userform})
 
 
@@ -260,8 +261,9 @@ def edit_in_db(request, id):
             person.age = request.POST.get("age")
             person.save()
             return HttpResponseRedirect("/read")
-        else:
-            return render(request, "firstapp/edit_db.html", context={"person": person})
+
+        return render(request, "firstapp/edit_db.html", context={"person": person})
+
     except Person.DoesNotExist:
         return HttpResponseNotFound("<h2>Клиент не найден.</h2>")
 
@@ -271,6 +273,7 @@ def delete_in_db(request, id):
         person = Person.objects.get(id=id)
         person.delete()
         return HttpResponseRedirect("/read")
+
     except Person.DoesNotExist:
         return HttpResponseNotFound("<h2>Клиент не найден.</h2>")
 
