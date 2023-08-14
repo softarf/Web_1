@@ -93,3 +93,25 @@ class FieldsTypes(models.Model):
 
     uuid_text = models.UUIDField(max_length=36, verbose_name="UUID-адрес")
     # "uuid NOT NULL"
+
+
+#                                 7.6.1. Организация связей между таблицами "один-ко-многим". Стр. 256 - 262.
+class Company(models.Model):
+    title = models.CharField(max_length=30, verbose_name='Название')
+    #
+    objects = models.Manager()          # Диспетчер записей.
+
+    def __str__(self):
+        return self.title
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=30, verbose_name='Название')
+    price = models.IntegerField(verbose_name='Цена')
+    company = models.ForeignKey(Company, null=True, related_name='products',
+                                on_delete=models.CASCADE, verbose_name='Компания')
+    #
+    objects = models.Manager()          # Диспетчер записей.
+
+    def __str__(self):
+        return self.name

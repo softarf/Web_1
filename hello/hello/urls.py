@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic import TemplateView
 
-from firstapp import views
+from firstapp import views, relationships
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -103,6 +103,8 @@ urlpatterns = [
     path('read/', views.index_read),
     path('read/create/', views.save_in_db),
     #          7.5. Пример работы с объектами модели данных: Редактирование и удаление информации из БД. Стр. 250 - 256.
-    path('read/edit/<int:id>', views.edit_in_db),
-    path('read/delete/<int:id>', views.delete_in_db),
+    path('read/edit/<int:id>/', views.edit_in_db),
+    path('read/delete/<int:id>/', views.delete_in_db),
+    #                             7.6.1. Организация связей между таблицами "один-ко-многим". Стр. 256 - 262.
+    path('one_to_many/', relationships.manage_one_to_many),
 ]

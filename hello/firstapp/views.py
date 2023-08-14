@@ -5,7 +5,7 @@ from django.template.response import TemplateResponse
 
 from firstapp.forms import UserForm, FormsList, WidgetFieldForm, InitialFieldForm, OrderFieldForm
 from firstapp.forms import HelpFieldForm, ViewForm, ValidForm, SetFieldsForm, FieldStylesForm
-from firstapp.models import Person
+from firstapp.models import Person, Product, Company
 
 
 # Create your views here.
@@ -277,4 +277,15 @@ def delete_in_db(request, id):
     except Person.DoesNotExist:
         return HttpResponseNotFound("<h2>Клиент не найден.</h2>")
 
-    # TODO: Повторить параграфы 6.4.6., 6.4.7., 6.4.8., 7.4. и 7.5.
+
+# TODO: Повторить параграфы 6.4.6., 6.4.7., 6.4.8., 7.4. и 7.5.
+
+
+#                                 7.6.1. Организация связей между таблицами "один-ко-многим". Стр. 256 - 262.
+""" Работа с таблицами, имеющими связь 'Один-ко-Многим'.
+    Главная/родительская модель связана с зависимой/дочерней/подчинённой.
+"""
+""" Вынесено в отдельный файл relationships.py
+    def manage_one_to_many(request):
+    ...
+"""
