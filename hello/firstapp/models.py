@@ -16,6 +16,12 @@ class Person(models.Model):
     objects = models.Manager()          # Диспетчер записей. Для PyCharm Community объявлять явно.
     DoesNotExist = models.Manager       # Собственное исключение. Для PyCharm Community объявлять явно.
 
+    class Meta:
+        verbose_name = 'Человек'
+        verbose_name_plural = 'Люди'
+        ordering = ['name', ]
+        # unique_together = ('article', 'rubric')    # Можно задать уникальность для сочетания значений полей.
+
     def __str__(self):
         return self.name
 
