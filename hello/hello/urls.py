@@ -105,6 +105,9 @@ urlpatterns = [
     #          7.5. Пример работы с объектами модели данных: Редактирование и удаление информации из БД. Стр. 250 - 256.
     path('read/edit/<int:id>/', views.edit_in_db),
     path('read/delete/<int:id>/', views.delete_in_db),
+    #                             7.6. Организация связей между таблицами в модели данных. Стр. 256 - 269.
     #                             7.6.1. Организация связей между таблицами "один-ко-многим". Стр. 256 - 262.
     path('one_to_many/', relationships.manage_one_to_many),
+    #                             7.6.2. Организация связей между таблицами "многие-ко-многим". Стр. 262 - 266.
+    path('many_to_many/', relationships.manage_many_to_many),
 ]

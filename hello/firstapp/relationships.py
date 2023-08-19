@@ -1,29 +1,31 @@
 from django.http import HttpResponse
 
-from firstapp.models import Person, Product, Company
+from firstapp.models import Person, Product, Company, Order, OrderPosition
 
 
-#                                 7.6.1. Организация связей между таблицами "один-ко-многим". Стр. 256 - 262.
+#                             7.6. Организация связей между таблицами в модели данных. Стр. 256 - 269.
+#                             7.6.1. Организация связей между таблицами "один-ко-многим". Стр. 256 - 262.
 def manage_one_to_many(request):
     """ """
     """ Работа с таблицами, имеющими связь 'Один-ко-Многим'.
-        Главная/родительская модель связана с зависимой/дочерней/подчинённой.
+        Главная/родительская/первичная модель связана с зависимой/дочерней/вторичная/подчинённой.
     """
     # Перечень всех товаров, которые производит компания "Электрон"
     prods_1 = Product.objects.filter(company__title="Электрон")  # <class 'django.db.models.query.QuerySet'>
     # Здесь использован атрибут 'title' главной модели 'Company' для фильтрации объектов зависимой модели 'Product'.
     print(f'prods_1 = {prods_1}')
 
-    # Свойство 'related_name' позволяет изменить направление связи и обратиться из главной модели к зависимой.
-    """ Работа с таблицами, имеющими связь 'Один-ко-Многим'.
-    """
-
     # Перечень всех товаров, которые производит компания "Электрон" (Все товары компании "Электрон").
     prods_2 = Company.objects.get(title="Электрон").products.all()  # <class 'django.db.models.query.QuerySet'>
     # Здесь использовано свойство 'related_name' зависимой модели 'Product' для обращения к ней из главной модели Company.
     print(f'prods_2 = {prods_2}')
+
     """ QuerySet - это список из объектов модели ('Company' или 'Product')
         Его можно перебрать в цикле. Или обратиться к отдельному элементу по индексу. """
+
+    # Свойство 'related_name' позволяет изменить направление связи и обратиться из главной модели к зависимой.
+    """ Работа с таблицами, имеющими связь 'Один-ко-Многим'.
+    """
     '''
 
     #               Запуск интерпретатора Python:
@@ -95,10 +97,11 @@ def manage_one_to_many(request):
     <QuerySet [<Product: Телефон Samsung>, <Product: Телефон Iphone>, <Product: Телефон Nokia>]>
 
     #               а) Обновление товара.
-    # Метод 'get' не подходит для выбора товара перед изменением! Только 'filter' или 'all'.
+    # Метод 'get' не подходит для выбора товара перед изменением! Только 'filter()' или 'all()'.
     >>> Product.objects.filter(name="Планшет ipad").update(name="Планшет Ipad")
     1
-    #               б)
+    #               б) Идентифицировать компанию можно как по объекту/записи '<Company: Электрон>',
+    #                  так и по ключу 'company_id'.
     >>> Product.objects.filter(name="Телефон Nokia").update(company=Company.objects.get(title="Ракета"))
     1
     >>> Product.objects.filter(name="Телефон Nokia").update(company_id=2)       # "Ракета"
@@ -130,5 +133,136 @@ def manage_one_to_many(request):
     s += '\r\n\r\nСписок продуктов\r\n\r\n'
     for pp in Product.objects.all():
         s += pp.name + '\r\n'
+    content = s
+    return HttpResponse(content, content_type='text/plain; charset=utf-8')    # "plain text" - Простой текст.
+
+
+#                             7.6.2. Организация связей между таблицами "многие-ко-многим". Стр. 262 - 266.
+def manage_many_to_many(request):
+    """ """
+    """ Работа с таблицами, имеющими связь 'Многие-ко-Многим'.
+        ВЕДОМАЯ модель связана с ВЕДУЩЕЙ (в которой объявлено поле внешнего ключа ManyToManyField).
+        Ведомая модель с ведущей являются СВЯЗАННЫМИ.
+        К двум связанным моделям (источникам) создаётся третья СВЯЗУЮЩАЯ (промежуточная/соединительная).
+    """
+    # Перечень всех товаров из "Заказ № 2"
+    prods_1 = Product.objects.filter(orders__number=4)  # <class 'django.db.models.query.QuerySet'>
+    print(f'prods_1 = {prods_1}')
+
+    # Свойство 'related_name' позволяет изменить направление связи и обратиться из ведомой модели к ведущей.
+    """ Работа с таблицами, имеющими связь 'Многие-ко-Многим'.
+    """
+    '''
+
+    #               Запуск интерпретатора Python:
+    > python manage.py shell
+    >>> from firstapp.models import Person, Product, Company, Order, OrderPosition
+
+    #               Удаление объекта:
+    >>> Product.objects.get(name="Телефон Xiaomi").delete()    # - ... модели 'Product'
+    (1, {'firstapp.Product': 1})
+    >>> Person.objects.get(name="Сергей").delete()             # - ... модели 'Person'
+    (2, {'firstapp.Order': 1, 'firstapp.Person': 1})           # - одновременно удалился его заказ (удалятся все заказы)
+    >>> Order.objects.get(number=2).delete()                   # - ... модели 'Order'
+    (1, {'firstapp.Order': 1})
+    >>> Order.objects.filter(person__name="Виктор").delete()   # - Удаление всех заказов Виктора
+    (8, {'firstapp.OrderPosition': 4, 'firstapp.Order': 4})
+
+    #               Создание объекта ведущей модели 'Order' ("пустой заказ от Максима"):
+    >>> ord1 = Order.objects.create(number=4, person=Person.objects.get(name="Максим"))
+    <Order: Заказ № 4>
+    >>> ord3 = Order.objects.create(person=Person.objects.get(name="Андрей"))
+    <Order: Заказ № 7>
+    
+    #              Внесение первого продукта в заказ с указанием нужного количества (создание заказа).
+    #              Т. е. создание нового заказа с привязкой к нему заданного продукта с указанным количеством:
+    #       выбирает продукт
+    >>> prod1 = Product.objects.get(name="Ноутбук ASUS")
+    >>> prod2 = Product.objects.get(name="Ноутбук DELL")
+    >>> prod3 = Product.objects.get(name="Телефон Samsung")
+    >>> prod4 = Product.objects.get(name="Планшет Ipad")
+    >>> prod5 = Product.objects.get(name="Телефон Iphone")
+    >>> prod6 = Product.objects.get(name="Телефон Nokia")
+    >>> prod7 = Product.objects.get(name="Планшет Samsung")
+    >>> prod12 = Product.objects.get(name="Телефон Xiaomi")
+    >>> prod13 = Product.objects.get(name="Ноутбук HP")
+    #       создаёт новый заказ, присваивает пользователя, задаёт нужное количество продукта
+    >>> ord2 = prod.orders.create(person=Person.objects.get(name="Виктор"), through_defaults={'quantity': 4})
+    <Order: Заказ № 6>
+    
+    #              Внесение очередного продукта в заказ с указанием нужного количества (изменение заказа).
+    #              Т. е. привязка к существующему заказу заданного продукта с указанным количеством:
+    #       выбирает заказ
+    >>> ord = Order.objects.get(number=5)
+    #       выбирает продукт
+    >>> prod = Product.objects.get(name="Ноутбук ASUS")
+    >>> prod1 = Product.objects.get(name="Телефон Iphone")
+    >>> prod2 = Product.objects.get(name="Телефон Nokia")
+    >>> prod3 = Product.objects.get(name="Телефон Samsung")
+    >>> prod4 = Product.objects.get(name="Планшет Samsung")
+    
+    #       1) создаёт связь, как новую запись в промежуточной таблице
+    >>> OrderPosition.orders.create(product=prod, order=ord, quantity=5)
+    
+    #       2) а) создаёт связь, как добавление продукта к заказу
+    >>> ord.products.add(prod, through_defaults={'quantity': 5})
+    #       2) б) или, как добавление заказа к продукту
+    >>> prod.orders.add(ord, through_defaults={'quantity': 5})
+    
+    #       3) а) заменяет весь старый перечень продуктов на новый список (количество устанавливается одинаковым)
+    >>> Order.objects.get(number=7).products.set([prod3, prod4], clear=True, through_defaults={'quantity': 5})
+    #       3) б) если clear=False, то если старого продукта нет в новом списке, то он удаляется,
+    #          если есть, то он остаётся без изменений (количество не меняется),
+    #          продукт из нового списка, которого нет среди старых, добавляется (со своим новым количеством)
+    >>> Order.objects.get(number=7).products.set([prod3, prod12], clear=False, through_defaults={'quantity': 3})
+    
+    #       4) создаёт связь, добавляя к заказу вновь создаваемый продукт
+    >>> ord.products.create(name="Ноутбук HP", price=41000, company_id=2, through_defaults={'quantity': 3})
+    1
+    
+    #              Удаление указанного продукта из заказа (изменение заказа).
+    #              Т. е. удаление связи между указанным продуктом и заказом:
+    #       выбирает заказ
+    >>> ord = Order.objects.get(number=5)
+    #       выбирает продукт
+    >>> prod = Product.objects.get(name="Ноутбук ASUS")
+    #       удаляет связь между заказом и указанными продуктами
+    >>> ord.products.remove(prod1, prod3, ... , prod_N)
+    #       удаляет связь с продуктом в одно действие
+    >>> Order.objects.get(number=5).products.remove(Product.objects.get(name="Ноутбук ASUS"))
+    >>> Product.objects.get(name="Ноутбук ASUS").orders.remove(Order.objects.get(number=5))
+
+    #               Демонстрация объектов ведомой модели 'Product', привязанных к указанному объекту ведущей
+    #               модели 'Order':
+    >>> Order.objects.get(number=4).products.all()
+    <QuerySet [<Product: Телефон Xiaomi>, <Product: Телефон Iphone>]>
+
+    #               Демонстрация объектов ведущей модели 'Order', привязанных к указанному объекту ведомой
+    #               модели 'Product':
+    >>> Order.objects.filter(products__name="Ноутбук ASUS")
+    <QuerySet [<Order: Заказ № 2>, <Order: Заказ № 3>]>
+
+    #               Количество всех заказов, в которых есть продукт "Ноутбук ASUS".
+    >>> Product.objects.get(name="Ноутбук ASUS").orders.count()
+    3
+    >>>
+
+    #                Так же доступны команды (для 'related_name').
+    
+    #   clear() - удаляет связи между всеми продуктами и указанным заказом.
+    
+    #   remove() - удаляет связи между указанными продуктами и указанным заказом.
+    '''
+
+    s = 'Заказы и их продукты:\r\n\r\n'
+    for order in Order.objects.all():
+        s += f'Заказ № {order.number}' + '\r\n'
+        for position in order.positions.all():
+            """ Все заказы перебираем по одному. Работаем через промежуточную таблицу 'order.positions.all()'.
+                Через неё получаем доступ как к "Продуктам", так и к "Количеству".  Для выбранного заказа находим ссылку
+                на таблицу "Продукты", переходим в неё. Выбираем в ней поле "Название" 'position.product.name'.
+                В промежуточной таблице выбираем поле "Количество" 'position.quantity'.
+            """
+            s += '        ' + position.product.name + '  |  ' + str(position.quantity) + ' шт\r\n'
     content = s
     return HttpResponse(content, content_type='text/plain; charset=utf-8')    # "plain text" - Простой текст.

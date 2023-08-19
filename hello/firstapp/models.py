@@ -1,14 +1,17 @@
 from django.db import models
 
+
 # Create your models here.
 
 
 #                                 7.1. Создание моделей и миграции базы данных. Стр. 233 - 238.
 class Person(models.Model):
+    # id = ... (AutoField)
     # Можно задать свой первичный ключ:
     # person_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     name = models.CharField(max_length=20)
     age = models.IntegerField()
+    # orders = ... (Manager - Order)
     #
     objects = models.Manager()          # Диспетчер записей. Для PyCharm Community объявлять явно.
     DoesNotExist = models.Manager       # Собственное исключение. Для PyCharm Community объявлять явно.
@@ -97,7 +100,9 @@ class FieldsTypes(models.Model):
 
 #                                 7.6.1. Организация связей между таблицами "один-ко-многим". Стр. 256 - 262.
 class Company(models.Model):
+    # id = ...
     title = models.CharField(max_length=30, verbose_name='Название')
+    # products = ... (Manager - Product)
     #
     objects = models.Manager()          # Диспетчер записей.
 
@@ -106,12 +111,61 @@ class Company(models.Model):
 
 
 class Product(models.Model):
+    # id = ... (AutoField)
     name = models.CharField(max_length=30, verbose_name='Название')
     price = models.IntegerField(verbose_name='Цена')
-    company = models.ForeignKey(Company, null=True, related_name='products',
-                                on_delete=models.CASCADE, verbose_name='Компания')
+    company = models.ForeignKey(Company, null=True, blank=True, related_name='products',
+                                on_delete=models.CASCADE, verbose_name='Производитель')
+    # related_name='products'. Здесь products - диспетчер обратной связи с моделью Company.
+    # orders = ... (Manager - Order)
+    # positions = ... (Manager - OrderPosition)
     #
     objects = models.Manager()          # Диспетчер записей.
 
     def __str__(self):
         return self.name
+
+
+#                                 7.6.2. Организация связей между таблицами "многие-ко-многим". Стр. 262 - 266.
+def number_default():
+    """ Предлагает начальное значение для поля number модели Order.
+        Находит максимальное имеющееся значение и увеличивает его на единицу.
+    """
+    result = Order.objects.aggregate(max_num=models.Max('number'))
+    return 1 + result['max_num'] if result['max_num'] else 1
+
+
+class Order(models.Model):
+    # id = ... (AutoField)
+    number = models.PositiveIntegerField(default=number_default, unique=True, verbose_name='Номер',)
+    products = models.ManyToManyField(Product, through='OrderPosition', related_name='orders', verbose_name='Продукт')
+    # related_name='orders'. Здесь orders - диспетчер обратной связи с моделью Product.
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='orders', verbose_name='Заказчик')
+    # related_name='orders'. Здесь orders - диспетчер обратной связи с моделью Person.
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
+    executed = models.BooleanField(default=False, verbose_name='Завершённый')
+    # positions = ... (Manager - OrderPosition)
+    #
+    objects = models.Manager()          # Диспетчер записей.
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+        ordering = ['number', ]
+        # unique_together = ('number', 'created_at')    # Можно задать уникальность для сочетания значений полей.
+
+    def __str__(self):
+        return f'Заказ № {self.number}'
+
+
+class OrderPosition(models.Model):    # Объект связки продуктов и заказов ("Многие-Ко-Многим").
+    # id = ... (AutoField)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='positions', verbose_name='Продукт')
+    # related_name='positions'. Здесь positions - диспетчер обратной связи с моделью Product.
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='positions',
+                              to_field='number', verbose_name='Заказ')
+    # related_name='positions'. Здесь positions - диспетчер обратной связи с моделью Order.
+    quantity = models.IntegerField(default=1, verbose_name='Количество')
+    #
+    # Для моделей 'positions', это такой же менеджер (диспетчер записей), как и 'objects'.
+    objects = models.Manager()  # Диспетчер записей.
