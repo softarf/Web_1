@@ -169,9 +169,9 @@ def manage_many_to_many(request):
     (8, {'firstapp.OrderPosition': 4, 'firstapp.Order': 4})
 
     #               Создание объекта ведущей модели 'Order' ("пустой заказ от Максима"):
-    >>> ord1 = Order.objects.create(number=4, person=Person.objects.get(name="Максим"))
+    >>> ord1 = Order.objects.create(number=4, person=Person.objects.get(name="Андрей"))
     <Order: Заказ № 4>
-    >>> ord3 = Order.objects.create(person=Person.objects.get(name="Андрей"))
+    >>> ord3 = Order.objects.create(person=Person.objects.get(name="Максим"))
     <Order: Заказ № 7>
     
     #              Внесение первого продукта в заказ с указанием нужного количества (создание заказа).
@@ -201,19 +201,21 @@ def manage_many_to_many(request):
     >>> prod3 = Product.objects.get(name="Телефон Samsung")
     >>> prod4 = Product.objects.get(name="Планшет Samsung")
     
-    #       1) создаёт связь, как новую запись в промежуточной таблице
-    >>> OrderPosition.orders.create(product=prod, order=ord, quantity=5)
+    #       1) создаёт связь при создании нового заказа с одновременным добавлением продукта
+    >>> Order.objects.create(person=Person.objects.get(name="Максим")).products.add(prod5, through_defaults={'quantity': 2})
     
     #       2) а) создаёт связь, как добавление продукта к заказу
     >>> ord.products.add(prod, through_defaults={'quantity': 5})
     #       2) б) или, как добавление заказа к продукту
-    >>> prod.orders.add(ord, through_defaults={'quantity': 5})
+    >>> prod.orders.add(ord, through_defaults={'quantity': 5})    
+    #       2) в) создаёт новую запись в промежуточной таблице
+    >>> OrderPosition.orders.create(product=prod, order=ord, quantity=5)
     
-    #       3) а) заменяет весь старый перечень продуктов на новый список (количество устанавливается одинаковым)
+    #       3) а) заменяет весь старый перечень продуктов на новый список (quantity устанавливается одинаковым)
     >>> Order.objects.get(number=7).products.set([prod3, prod4], clear=True, through_defaults={'quantity': 5})
     #       3) б) если clear=False, то если старого продукта нет в новом списке, то он удаляется,
-    #          если есть, то он остаётся без изменений (количество не меняется),
-    #          продукт из нового списка, которого нет среди старых, добавляется (со своим новым количеством)
+    #          если есть, то он остаётся без изменений (quantity не меняется),
+    #          продукт из нового списка, которого нет среди старых, добавляется (со своим новым quantity)
     >>> Order.objects.get(number=7).products.set([prod3, prod12], clear=False, through_defaults={'quantity': 3})
     
     #       4) создаёт связь, добавляя к заказу вновь создаваемый продукт
@@ -226,10 +228,11 @@ def manage_many_to_many(request):
     >>> ord = Order.objects.get(number=5)
     #       выбирает продукт
     >>> prod = Product.objects.get(name="Ноутбук ASUS")
-    #       удаляет связь между заказом и указанными продуктами
+    #       удаляет связи между заказом и указанными продуктами
     >>> ord.products.remove(prod1, prod3, ... , prod_N)
-    #       удаляет связь с продуктом в одно действие
+    #       удаляет связь продукта с заказом в одно действие
     >>> Order.objects.get(number=5).products.remove(Product.objects.get(name="Ноутбук ASUS"))
+    #       или - заказа с продуктом:
     >>> Product.objects.get(name="Ноутбук ASUS").orders.remove(Order.objects.get(number=5))
 
     #               Демонстрация объектов ведомой модели 'Product', привязанных к указанному объекту ведущей

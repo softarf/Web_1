@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.conf import settings
+
 
 # Create your models here.
 
@@ -11,10 +13,10 @@ class Person(models.Model):
     # person_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     name = models.CharField(max_length=20)
     age = models.IntegerField()
-    # orders = ... (Manager - Order)
     #
-    objects = models.Manager()          # Диспетчер записей. Для PyCharm Community объявлять явно.
-    DoesNotExist = models.Manager       # Собственное исключение. Для PyCharm Community объявлять явно.
+    # orders = ...                    (Диспетчер обратной связи - Order)
+    objects = models.Manager()  # Диспетчер записей. Для PyCharm Community объявлять явно.
+    DoesNotExist = models.Manager  # Собственное исключение. Для PyCharm Community объявлять явно.
 
     class Meta:
         verbose_name = 'Человек'
@@ -67,7 +69,7 @@ class FieldsTypes(models.Model):
     big_int = models.BigIntegerField(verbose_name="Большое целое")
     # "bigint NOT NULL"                                      # -9223372036854775808 < big_int < 9223372036854775807
 
-    dicimal_num = models.DecimalField(max_digits=6, decimal_places=2, verbose_name="Десятичное число")    # XXXX.ZZ
+    dicimal_num = models.DecimalField(max_digits=6, decimal_places=2, verbose_name="Десятичное число")  # XXXX.ZZ
     # "numeric(X, Z) NOT NULL"
 
     float_num = models.FloatField(verbose_name="Вещественное число")
@@ -108,9 +110,9 @@ class FieldsTypes(models.Model):
 class Company(models.Model):
     # id = ...
     title = models.CharField(max_length=30, verbose_name='Название')
-    # products = ... (Manager - Product)
     #
-    objects = models.Manager()          # Диспетчер записей.
+    # products = ...               (Диспетчер обратной связи - Product)
+    objects = models.Manager()  # Диспетчер записей.
 
     def __str__(self):
         return self.title
@@ -120,13 +122,13 @@ class Product(models.Model):
     # id = ... (AutoField)
     name = models.CharField(max_length=30, verbose_name='Название')
     price = models.IntegerField(verbose_name='Цена')
-    company = models.ForeignKey(Company, null=True, blank=True, related_name='products',
-                                on_delete=models.CASCADE, verbose_name='Производитель')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE,
+                                related_name='products', verbose_name='Производитель')
     # related_name='products'. Здесь products - диспетчер обратной связи с моделью Company.
-    # orders = ... (Manager - Order)
-    # positions = ... (Manager - OrderPosition)
     #
-    objects = models.Manager()          # Диспетчер записей.
+    # orders = ...                (Диспетчер обратной связи - Order)
+    # positions = ...             (Диспетчер обратной связи - OrderPosition)
+    objects = models.Manager()  # Диспетчер записей.
 
     def __str__(self):
         return self.name
@@ -134,25 +136,36 @@ class Product(models.Model):
 
 #                                 7.6.2. Организация связей между таблицами "многие-ко-многим". Стр. 262 - 266.
 def number_default():
-    """ Предлагает начальное значение для поля number модели Order.
-        Находит максимальное имеющееся значение и увеличивает его на единицу.
+    """ Предлагает начальное значение для поля 'number' модели 'Order'.
     """
-    result = Order.objects.aggregate(max_num=models.Max('number'))
-    return 1 + result['max_num'] if result['max_num'] else 1
+    if settings.FILL_IN:
+        # Находит пропущенное значение и предлагает его.
+        for i in range(1, 32000):
+            try:
+                num = Order.objects.get(number=i)
+            except Order.DoesNotExist:
+                return i
+        else:
+            raise ValueError("Таблица 'Order' заполнена полностью.")
+    else:
+        # Находит максимальное имеющееся значение и увеличивает его на единицу.
+        cur_num = Order.objects.aggregate(max_num=models.Max('number'))
+        return 1 + cur_num['max_num'] if cur_num['max_num'] else 1
 
 
 class Order(models.Model):
     # id = ... (AutoField)
-    number = models.PositiveIntegerField(default=number_default, unique=True, verbose_name='Номер',)
+    number = models.PositiveIntegerField(default=number_default, unique=True, verbose_name='Номер')
     products = models.ManyToManyField(Product, through='OrderPosition', related_name='orders', verbose_name='Продукт')
     # related_name='orders'. Здесь orders - диспетчер обратной связи с моделью Product.
     person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='orders', verbose_name='Заказчик')
     # related_name='orders'. Здесь orders - диспетчер обратной связи с моделью Person.
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
     executed = models.BooleanField(default=False, verbose_name='Завершённый')
-    # positions = ... (Manager - OrderPosition)
     #
-    objects = models.Manager()          # Диспетчер записей.
+    # positions = ...             (Диспетчер обратной связи - OrderPosition)
+    objects = models.Manager()  # Диспетчер записей.
+    DoesNotExist = models.Manager  # Собственное исключение. Для PyCharm Community объявлять явно.
 
     class Meta:
         verbose_name = 'Заказ'
@@ -164,14 +177,19 @@ class Order(models.Model):
         return f'Заказ № {self.number}'
 
 
-class OrderPosition(models.Model):    # Объект связки продуктов и заказов ("Многие-Ко-Многим").
+class OrderPosition(models.Model):  # Объект связки продуктов и заказов ("Многие-Ко-Многим").
     # id = ... (AutoField)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='positions', verbose_name='Продукт')
     # related_name='positions'. Здесь positions - диспетчер обратной связи с моделью Product.
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='positions',
-                              to_field='number', verbose_name='Заказ')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='positions', verbose_name='Заказ')
     # related_name='positions'. Здесь positions - диспетчер обратной связи с моделью Order.
+    order_number = models.PositiveIntegerField(editable=False, verbose_name='Номер заказа')
     quantity = models.IntegerField(default=1, verbose_name='Количество')
     #
     # Для моделей 'positions', это такой же менеджер (диспетчер записей), как и 'objects'.
     objects = models.Manager()  # Диспетчер записей.
+
+    def save(self, *args, **kwargs):
+        # Сохраняет номер текущего заказа.
+        self.order_number = self.order.number
+        return super().save(*args, **kwargs)

@@ -35,8 +35,10 @@ class OrderPositionInLine(admin.TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'number', 'person', 'created_at', 'executed']
-    list_display_links = ['id', 'number']
-    search_fields = ['number', ]
-    inlines = [OrderPositionInLine, ]  # Добавляем встраиваемые данные (таблицу ArticleRubric)
+    list_display_links = ['id', 'number']  # Не могут быть, одновременно, редактируемыми.
+    search_fields = ['number', 'created_at']
+    list_filter = ('created_at', 'executed')
+    list_editable = ('executed', )       # Поля, которые можно редактировать прямо в общем списке.
+    inlines = [OrderPositionInLine, ]    # Добавляем встраиваемые данные (таблицу OrderPosition)
 
 # admin.site.register(Order, OrderAdmin)    # Можно и так, вместо декоратора.

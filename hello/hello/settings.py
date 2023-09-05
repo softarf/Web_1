@@ -148,3 +148,9 @@ STATICFILES_DIRS = [
 # Назначает класс для ключей 'pk', создающихся в моделях проекта автоматически.
 # Можно также объявить в 'firstapp/apps.py'.
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Для функции firstapp.models.number_default(), предлагающей начальные значения для поля 'number' модели 'Order'.
+# Если FILL_IN = True, то предлагает поле 'number' модели 'Order' заполнить отсутствующими
+# (пропущенными или удалёнными) значениями.
+# Если FILL_IN = False - то продолжает нумерацию после последнего, наибольшего значения.
+FILL_IN = True
