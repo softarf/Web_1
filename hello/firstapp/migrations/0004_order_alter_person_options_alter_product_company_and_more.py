@@ -41,9 +41,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('order_number', models.PositiveIntegerField(editable=False, verbose_name='Номер заказа')),
+                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='positions', to='firstapp.product', verbose_name='Продукт')),
                 ('quantity', models.IntegerField(default=1, verbose_name='Количество')),
                 ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='positions', to='firstapp.order', verbose_name='Заказ')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='positions', to='firstapp.product', verbose_name='Продукт')),
             ],
         ),
         migrations.AddField(

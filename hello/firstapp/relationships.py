@@ -269,3 +269,41 @@ def manage_many_to_many(request):
             s += '        ' + position.product.name + '  |  ' + str(position.quantity) + ' шт\r\n'
     content = s
     return HttpResponse(content, content_type='text/plain; charset=utf-8')    # "plain text" - Простой текст.
+
+
+#                             7.6.3. Организация связей между таблицами "один-к-одному". Стр. 266 - 269.
+def manage_one_to_one(request):
+    """ """
+    pass
+    """ Работа с таблицами, имеющими связь 'Один-к-Одному'.
+        ГЛАВНАЯ модель связана с ЗАВИСИМОЙ (в которой объявлено поле внешнего ключа OneToOneField).
+        Главная модель и зависимая являются СВЯЗАННЫМИ.
+    """
+    """
+                    1) С помощью связующего поля 'person' можно манипулировать объектами модели 'Person'.
+        
+    # Создадим пользователя Виктор
+    viktor = Person.objects.create(name="Виктор", age=43)
+    
+    # Создадим аккаунт пользователя Виктор
+    acc = Account.objects.create(login="viktor", password="1234", person=viktor)
+    
+    # Изменим имя пользователя
+    acc.person.name = "Витя"
+    acc.person.save()
+    
+                    2) С помощью диспетчера связи 'account' можно манипулировать объектами модели 'Account'.
+        
+    # Создадим пользователя Виктор
+    viktor = Person.objects.create(name="Виктор", age=43)
+    
+    # Создадим аккаунт пользователя Виктор
+    acc = Account(login="viktor", password="1234")
+    viktor.account = acc
+    viktor.account.save()
+    
+    # Изменим учётные данные пользователя
+    viktor.account.login = "qwerty"
+    viktor.account.password = "4321"
+    viktor.account.save()
+    """

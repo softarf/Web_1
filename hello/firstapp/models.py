@@ -15,6 +15,7 @@ class Person(models.Model):
     age = models.IntegerField()
     #
     # orders = ...                    (Диспетчер обратной связи - Order)
+    # account = ...                   (Диспетчер обратной связи - Account)
     objects = models.Manager()  # Диспетчер записей. Для PyCharm Community объявлять явно.
     DoesNotExist = models.Manager  # Собственное исключение. Для PyCharm Community объявлять явно.
 
@@ -193,3 +194,13 @@ class OrderPosition(models.Model):  # Объект связки продукто
         # Сохраняет номер текущего заказа.
         self.order_number = self.order.number
         return super().save(*args, **kwargs)
+
+
+#                             7.6.3. Организация связей между таблицами "один-к-одному". Стр. 266 - 269.
+class Account(models.Model):
+    # id не создаётся, его заменяет person_id (созданный из поля person).
+    login = models.CharField(max_length=20, verbose_name='Логин')
+    password = models.CharField(max_length=20, verbose_name='Пароль')
+    person = models.OneToOneField(Person, on_delete=models.CASCADE, primary_key=True, verbose_name='Пользователь')
+    #
+    objects = models.Manager()  # Диспетчер записей.

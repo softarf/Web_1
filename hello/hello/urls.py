@@ -110,4 +110,6 @@ urlpatterns = [
     path('one_to_many/', relationships.manage_one_to_many),
     #                             7.6.2. Организация связей между таблицами "многие-ко-многим". Стр. 262 - 266.
     path('many_to_many/', relationships.manage_many_to_many),
+    #                             7.6.3. Организация связей между таблицами "один-к-одному". Стр. 266 - 269.
+    path('one_to_one/', relationships.manage_one_to_one),
 ]
