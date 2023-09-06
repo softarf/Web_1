@@ -1,0 +1,41 @@
+                        <!-- 7.4. Чтение и запись информации в БД. Стр. 246 - 250. -->
+                        <!-- 7.5. Редактирование и удаление информации из БД. Стр. 250 - 256. -->
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta content="text/html; charset=utf-8">
+    <title>Модели в Django</title>
+  </head>
+  <body class="container">
+    <h2>Работа с базой данных.</h2><br>
+    <form method="POST" action="create/">    <!-- Добавляет префикс к собственному пути. -->
+      {% csrf_token %}
+      <p>
+        <label>Введите имя</label><br>
+        <input type="text" name="name" />
+      </p>
+      <p>
+        <label>Введите возраст</label><br>
+        <input type="number" name="age" />
+      </p>
+      <input type="submit" value="Сохранить">
+    </form>
+    <br>
+
+    {% if people.count > 0 %}
+      <h3>Список пользователей.</h3>
+      <table>
+        <tr><th>Id</th><th>Имя</th><th>Возраст</th><th>Действия</th></tr>
+        {% for person in people %}
+          <tr><td>{{ person.id }}</td>
+            <td>{{ person.name }}</td>
+            <td>{{ person.age }}</td>
+            <!-- Добавляет префикс и индекс пользователя к собственному пути. -->
+            <td><a href="edit/{{ person.id }}">Изменить</a> |
+              <a href="delete/{{ person.id }}">Удалить</a> </td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
+  </body>
+</html>

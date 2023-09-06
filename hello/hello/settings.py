@@ -15,6 +15,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))    # Можно и так.
 
 
 # Quick-start development settings - unsuitable for production
@@ -39,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # здесь мы подключаем наши приложения
+    # Здесь мы подключаем наши приложения
     'firstapp'
 ]
 
@@ -55,13 +56,16 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'hello.urls'
 
-TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
+TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")    # Указывается путь на уровне папки конфигурации проекта.
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR,],
-        'APP_DIRS': True,
+        'DIRS': [TEMPLATE_DIR, ],      # Здесь мы добавляем путь до шаблонов.
+        # 'DIRS': [                    # Или так:
+        #     os.path.join(BASE_DIR, "templates"),
+        # ],
+        'APP_DIRS': True,              # Так же, шаблоны можно разместить внутри приложений.
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -79,11 +83,12 @@ WSGI_APPLICATION = 'hello.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# Здесь мы можем заменить настройки для другой БД, например PostgreSQL
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        # Настройки для PostgreSQL
+        'NAME': BASE_DIR / 'firstapp_db.sqlite3',
+        # Пример настроек для PostgreSQL.
         # 'ENGINE': 'django.db.backends.postgresql',
         # 'NAME': 'db_name',
         # 'USER': 'postgres',
@@ -116,10 +121,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
+# Здесь мы можем заменить язык отображения Django и часовой пояс.
 # LANGUAGE_CODE = 'en-us'
-LANGUAGE_CODE = 'ru-ru'    # Установить для окна приветствия русский язык.
+LANGUAGE_CODE = 'ru-ru'               # Устанавливает русский язык для окна приветствия.
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Yekaterinburg'      # Устанавливает местный часовой пояс.
 
 USE_I18N = True
 
@@ -138,4 +145,12 @@ STATICFILES_DIRS = [
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
+# Назначает класс для ключей 'pk', создающихся в моделях проекта автоматически.
+# Можно также объявить в 'firstapp/apps.py'.
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Для функции firstapp.models.number_default(), предлагающей начальные значения для поля 'number' модели 'Order'.
+# Если FILL_IN = True, то предлагает поле 'number' модели 'Order' заполнить отсутствующими
+# (пропущенными или удалёнными) значениями.
+# Если FILL_IN = False - то продолжает нумерацию после последнего, наибольшего значения.
+FILL_IN = True

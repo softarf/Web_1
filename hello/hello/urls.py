@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic import TemplateView
 
-from firstapp import views
+from firstapp import views, relationships
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -96,4 +96,20 @@ urlpatterns = [
     path('set_fields/', views.index_set_fields),
     #                                     6.4.8. Присвоение стилей полям формы. Стр. 227 - 232.
     path('fields_css/', views.index_fields_css),     # 1)
+    #                                     7.1. Создание моделей и миграции базы данных. Стр. 233 - 238.
+    #                                     7.2. Типы полей в модели данных Django. Стр. 238 - 241.
+    #                                     7.3. Манипуляция с данными в Django на основе CRUD. Стр. 241 - 246.
+    #                     7.4. Пример работы с объектами модели данных: Чтение и запись информации в БД. Стр. 246 - 250.
+    path('read/', views.index_read),
+    path('read/create/', views.save_in_db),
+    #          7.5. Пример работы с объектами модели данных: Редактирование и удаление информации из БД. Стр. 250 - 256.
+    path('read/edit/<int:id>/', views.edit_in_db),
+    path('read/delete/<int:id>/', views.delete_in_db),
+    #                             7.6. Организация связей между таблицами в модели данных. Стр. 256 - 269.
+    #                             7.6.1. Организация связей между таблицами "один-ко-многим". Стр. 256 - 262.
+    path('one_to_many/', relationships.manage_one_to_many),
+    #                             7.6.2. Организация связей между таблицами "многие-ко-многим". Стр. 262 - 266.
+    path('many_to_many/', relationships.manage_many_to_many),
+    #                             7.6.3. Организация связей между таблицами "один-к-одному". Стр. 266 - 269.
+    path('one_to_one/', relationships.manage_one_to_one),
 ]
